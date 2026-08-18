@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyderabadNet - Internet Guide for Hyderabad</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fafafa;--surface:#fff;--border:#e5e7eb;--text:#1a1a2e;--muted:#6b7280;
+    --blue:#2563eb;--green:#059669;--orange:#d97706;--red:#dc2626;--purple:#7c3aed;
+    --radius:8px;--shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+  nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100}
+  nav .inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:2rem;height:50px}
+  nav .brand{font-weight:700;font-size:.95rem;white-space:nowrap}
+  nav .brand span{color:var(--blue)}
+  nav ul{list-style:none;display:flex;gap:1.25rem;overflow-x:auto}
+  nav a{color:var(--muted);font-size:.82rem;font-weight:500;white-space:nowrap}
+  nav a:hover{color:var(--text);text-decoration:none}
+  nav .credit{margin-left:auto;font-size:.72rem;color:var(--muted);white-space:nowrap}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 1.5rem}
+  h2{font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
+  .section{margin-bottom:2.5rem;padding-top:1.5rem}
+  .hero{padding:3rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:.5rem}
+  .hero h1{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.3;margin-bottom:.75rem}
+  .hero h1 .hl{color:var(--blue)}
+  .hero .tagline{font-size:1.05rem;color:var(--muted);max-width:600px;line-height:1.7}
+  .hero .steps{display:flex;gap:1.5rem;margin-top:1.25rem;flex-wrap:wrap}
+  .hero .step{display:flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:500}
+  .hero .step .num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
+  .tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
+  .tab{padding:.35rem .8rem;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.78rem;cursor:pointer;font-weight:500;transition:all .15s}
+  .tab:hover{border-color:var(--blue);color:var(--text)}
+  .tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .isp-list{display:flex;flex-direction:column;gap:.5rem}
+  .isp-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
+  .isp-row:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .isp-summary{display:grid;grid-template-columns:40px 1fr auto auto auto;gap:.75rem;align-items:center;padding:.75rem 1rem;cursor:pointer;user-select:none}
+  .isp-summary:hover{background:#f9fafb}
+  .isp-dot{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem}
+  .isp-info .isp-nm{font-weight:700;font-size:.92rem}
+  .isp-info .isp-desc{font-size:.76rem;color:var(--muted);line-height:1.4}
+  .isp-best{text-align:right}
+  .isp-best .price{font-weight:700;color:var(--green);font-size:.95rem}
+  .isp-best .lbl{font-size:.68rem;color:var(--muted)}
+  .isp-rating{font-size:.78rem;color:var(--muted);white-space:nowrap}
+  .isp-arrow{font-size:.7rem;color:var(--muted);transition:transform .2s}
+  .isp-row.open .isp-arrow{transform:rotate(90deg)}
+  .isp-details{display:none;border-top:1px solid var(--border);padding:.75rem 1rem;background:#fafbfc}
+  .isp-row.open .isp-details{display:block}
+  .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.5rem}
+  .plan-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem .75rem;transition:border-color .15s;position:relative}
+  .plan-chip:hover{border-color:var(--blue)}
+  .plan-chip .pc-speed{font-weight:700;font-size:.88rem}
+  .plan-chip .pc-price{color:var(--green);font-weight:600;font-size:.85rem;margin-top:.15rem}
+  .plan-chip .pc-ott{color:var(--orange);font-size:.72rem;margin-top:.2rem}
+  .plan-chip .pc-fup{color:var(--muted);font-size:.7rem}
+  .plan-chip.best{border-color:var(--green);background:#f0fdf4}
+  .plan-chip.best::after{content:"BEST";position:absolute;top:.3rem;right:.4rem;font-size:.55rem;background:var(--green);color:#fff;padding:.1rem .3rem;border-radius:3px;font-weight:700}
+  .isp-note{font-size:.75rem;color:var(--muted);margin-top:.6rem;padding:.5rem .75rem;background:#f9fafb;border-radius:4px;border-left:3px solid var(--orange)}
+  .isp-actions{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;align-items:center}
+  .visit-link{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .75rem;border-radius:5px;background:var(--blue);color:#fff;font-size:.78rem;font-weight:600;text-decoration:none;transition:opacity .15s}
+  .visit-link:hover{opacity:.85;text-decoration:none}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap}
+  table.cmp th{text-align:left;padding:.55rem .7rem;background:#f9fafb;border-bottom:2px solid var(--border);font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:50px;z-index:5}
+  table.cmp td{padding:.5rem .7rem;border-bottom:1px solid #f3f4f6}
+  table.cmp tr:hover td{background:#f9fafb}
+  .cheapest{color:var(--green);font-weight:700}
+  .finder{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow)}
+  .finder-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:1rem}
+  .field label{display:block;font-size:.78rem;font-weight:600;margin-bottom:.25rem}
+  .field select{width:100%;padding:.5rem .65rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--surface);color:var(--text);appearance:auto}
+  .field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+  .find-btn{width:100%;padding:.65rem;border:none;border-radius:6px;background:var(--blue);color:#fff;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s}
+  .find-btn:hover{background:#1d4ed8}
+  .find-btn:active{transform:scale(.98)}
+  #routerOut{margin-top:1rem}
+  .rec{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:.6rem;transition:transform .15s}
+  .rec:hover{transform:translateY(-1px)}
+  .rec .rec-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:.4rem}
+  .rec h4{font-size:.9rem;margin-bottom:.15rem}
+  .rec .rec-meta{font-size:.78rem;color:var(--muted)}
+  .rec .rec-speed{font-weight:700;color:var(--green);font-size:.92rem}
+  .rec .rec-why{font-size:.82rem;color:#374151;margin-top:.3rem}
+  .tip-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);padding:.85rem 1rem;margin-top:.75rem}
+  .tip-box h4{font-size:.85rem;color:var(--blue);margin-bottom:.35rem}
+  .tip-box ul{padding-left:1rem;font-size:.82rem;color:#374151}
+  .tip-box li{margin-bottom:.2rem}
+  .sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
+  .sec-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}
+  .sec-item:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.06)}
+  .sev{display:inline-block;font-size:.65rem;font-weight:700;padding:.12rem .4rem;border-radius:999px;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.03em}
+  .sev-crit{background:#fef2f2;color:var(--red)}
+  .sev-high{background:#fffbeb;color:var(--orange)}
+  .sev-med{background:#f5f3ff;color:var(--purple)}
+  .sev-ok{background:#f0fdf4;color:var(--green)}
+  .sec-item h3{font-size:.88rem;margin-bottom:.2rem}
+  .sec-item p{font-size:.78rem;color:var(--muted);line-height:1.5}
+  .gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.6rem}
+  .gloss{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem .85rem;transition:transform .15s}
+  .gloss:hover{transform:translateY(-1px)}
+  .gloss dt{font-weight:700;font-size:.82rem;color:var(--blue);margin-bottom:.1rem}
+  .gloss dd{font-size:.78rem;color:var(--muted);line-height:1.45}
+  footer{text-align:center;padding:2rem 1.5rem;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:2rem}
+  footer .sig{margin-top:.3rem;font-weight:600;color:var(--text)}
+  @media(max-width:640px){
+    .finder-grid{grid-template-columns:1fr}
+    .isp-summary{grid-template-columns:36px 1fr auto;gap:.5rem}
+    .isp-rating,.isp-arrow{display:none}
+    .isp-best .lbl{display:none}
+    .plan-grid{grid-template-columns:1fr 1fr}
+    nav ul{gap:.6rem}
+    nav .credit{display:none}
+    table.cmp{font-size:.72rem}
+    table.cmp th,table.cmp td{padding:.4rem .5rem}
+  }
+  .fade-in{animation:fadeUp .25s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="inner">
+    <div class="brand"><span>Hyderabad</span>Net</div>
+    <ul>
+      <li><a href="#isps">ISPs</a></li>
+      <li><a href="#compare">Compare</a></li>
+      <li><a href="#finder">Router Finder</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#glossary">Glossary</a></li>
+    </ul>
+    <span class="credit">made with love by asmgkr</span>
+  </div>
+</nav>
+<div class="wrap">
+  <div class="hero section" style="padding-top:0">
+    <h1>Internet in Hyderabad,<br><span class="hl">actually explained.</span></h1>
+    <p class="tagline">You pay for internet every month. But do you know if you're overpaying? Or if your router is the reason your Netflix buffers? This guide fixes that.</p>
+    <div class="steps">
+      <div class="step"><span class="num">1</span> Pick your ISP</div>
+      <div class="step"><span class="num">2</span> Get the right router</div>
+      <div class="step"><span class="num">3</span> Lock it down</div>
+    </div>
+  </div>
+
+  <!-- ============ ISPs ============ -->
+  <div class="section" id="isps">
+    <h2>Internet Providers in Hyderabad</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Click any provider to see all their plans. Prices exclude GST. Data verified from ISP websites, August 2026.</p>
+    <div class="tabs" id="ispTabs">
+      <button class="tab on" data-f="all">All</button>
+      <button class="tab" data-f="major">Major Players</button>
+      <button class="tab" data-f="budget">Budget Friendly</button>
+      <button class="tab" data-f="premium">Premium</button>
+    </div>
+    <div class="isp-list" id="ispList"></div>
+  </div>
+
+  <!-- ============ COMPARE ============ -->
+  <div class="section" id="compare">
+    <h2>Compare Plans Side by Side</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Best value plan per speed tier from each ISP. Green means cheapest at that speed. Excitel prices are 12-month commitment rates.</p>
+    <div class="tabs" id="cmpTabs">
+      <button class="tab on" data-s="all">All Speeds</button>
+      <button class="tab" data-s="50">Under 50</button>
+      <button class="tab" data-s="100">Under 100</button>
+      <button class="tab" data-s="200">Under 200</button>
+      <button class="tab" data-s="300">Under 300</button>
+      <button class="tab" data-s="500">Under 500</button>
+      <button class="tab" data-s="1000">1 Gbps</button>
+    </div>
+    <div class="tbl-wrap">
+      <table class="cmp"><thead><tr>
+        <th>Provider</th><th>Speed</th><th>Monthly</th><th>Notes</th><th>FUP</th><th>OTT</th>
+      </tr></thead><tbody id="cmpBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ============ ROUTER FINDER ============ -->
+  <div class="section" id="finder">
+    <h2>Find the Right Router</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Tell us about your setup. We'll suggest what to buy.</p>
+    <div class="finder">
+      <div class="finder-grid">
+        <div class="field"><label>Your plan speed</label><select id="fSpeed"><option value="30">Up to 30 Mbps</option><option value="50">Up to 50 Mbps</option><option value="100" selected>Up to 100 Mbps</option><option value="200">Up to 200 Mbps</option><option value="300">Up to 300 Mbps</option><option value="500">Up to 500 Mbps</option><option value="1000">Up to 1 Gbps</option></select></div>
+        <div class="field"><label>Home size</label><select id="fSize"><option value="small">Small (up to 800 sq ft)</option><option value="medium" selected>Medium (800 to 1500 sq ft)</option><option value="large">Large (1500 to 3000 sq ft)</option><option value="villa">Multi-story / Villa (3000+ sq ft)</option></select></div>
+        <div class="field"><label>Main use</label><select id="fUse"><option value="basic">Browsing &amp; social media</option><option value="streaming" selected>Streaming (Netflix, YouTube)</option><option value="gaming">Online gaming</option><option value="work">Work from home</option><option value="power">Everything, heavy use</option></select></div>
+        <div class="field"><label>How many devices?</label><select id="fDev"><option value="few">1 to 5</option><option value="mod" selected>5 to 15</option><option value="many">15 to 30</option><option value="lots">30+ (smart home heavy)</option></select></div>
+        <div class="field"><label>Budget (INR)</label><select id="fBudget"><option value="2000">Under 2,000</option><option value="4000">2,000 to 4,000</option><option value="8000" selected>4,000 to 8,000</option><option value="15000">8,000 to 15,000</option><option value="25000">15,000 to 25,000</option><option value="99999">No limit</option></select></div>
+        <div class="field"><label>Wall type between rooms</label><select id="fWall"><option value="open">Open layout, no thick walls</option><option value="brick" selected>Brick / standard walls</option><option value="concrete">Concrete slab (multi-floor)</option></select></div>
+      </div>
+      <button class="find-btn" onclick="findRouter()">Find My Router</button>
+      <div id="routerOut"></div>
+    </div>
+  </div>
+
+  <!-- ============ SECURITY ============ -->
+  <div class="section" id="security">
+    <h2>WiFi Security Guide</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Threats to watch for, and the steps to lock down your home network.</p>
+    <h3 style="margin-bottom:.75rem">Common Threats</h3>
+    <div class="sec-grid" style="margin-bottom:1.5rem">
+      <div class="sec-item"><span class="sev sev-crit">Critical</span><h3>Weak Default Passwords</h3><p>Most routers ship with "admin/admin". Anyone nearby can log in and take over your network.</p></div>
+      <div class="sec-item"><span class="sev sev-high">High</span><h3>WPS PIN Brute Force</h3><p>The 8-digit WPS PIN can be cracked in hours, giving attackers WiFi access even with a strong password.</p></div>
+      <div class="sec-item"><span class="sev sev-high">High</span><h3>Outdated Firmware</h3><p>Known vulnerabilities in old firmware let hackers execute code on your router remotely.</p></div>
+      <div class="sec-item"><span class="sev sev-high">High</span><h3>Evil Twin Attacks</h3><p>Fake hotspots mimicking your network name intercept your traffic and steal credentials.</p></div>
+      <div class="sec-item"><span class="sev sev-med">Medium</span><h3>IoT Device Exploitation</h3><p>Smart cameras and speakers with weak security can be hijacked to attack your network.</p></div>
+      <div class="sec-item"><span class="sev sev-med">Medium</span><h3>Packet Sniffing</h3><p>On unencrypted networks, attackers can read your passwords and messages in plain text.</p></div>
+    </div>
+    <h3 style="margin-bottom:.75rem">Security Checklist</h3>
+    <div class="sec-grid" style="margin-bottom:1.5rem">
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Change Admin Password</h3><p>Set a unique 12+ character password for your router's admin panel immediately after setup.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Use WPA3 or WPA2-AES</h3><p>Never use WEP or WPA/TKIP. WPA3 is best. WPA2-AES is acceptable if WPA3 isn't available.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Update Firmware Monthly</h3><p>Check for updates regularly or enable auto-update. This patches known security holes.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Disable WPS</h3><p>Turn off WiFi Protected Setup in router settings. It's convenient but fundamentally insecure.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Set Up a Guest Network</h3><p>Put visitors and smart-home devices on a separate network so they can't access your main devices.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Rename Your SSID</h3><p>Don't use your name, address, or ISP name. A generic name makes you a harder target.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Disable Remote Management</h3><p>Only allow router admin access from inside your home network, not from the internet.</p></div>
+      <div class="sec-item"><span class="sev sev-ok">Do this</span><h3>Monitor Connected Devices</h3><p>Check your router's admin panel periodically for unknown devices. Use the Fing app to scan.</p></div>
+    </div>
+    <h3 style="margin-bottom:.75rem">Advanced Tips</h3>
+    <div class="sec-grid">
+      <div class="sec-item"><h3>Use Secure DNS</h3><p>Configure your router to use Cloudflare (1.1.1.1) or Google (8.8.8.8) with DNS-over-HTTPS to prevent DNS snooping.</p></div>
+      <div class="sec-item"><h3>Disable UPnP</h3><p>Universal Plug and Play can be exploited by malware to open ports. Disable it and forward ports manually if needed.</p></div>
+      <div class="sec-item"><h3>Reduce Transmit Power</h3><p>In apartments, lower your router's signal strength so it doesn't reach neighboring networks.</p></div>
+      <div class="sec-item"><h3>Enable Router Firewall</h3><p>Most routers have a built-in SPI firewall. Make sure it's turned on to block unauthorized connections.</p></div>
+    </div>
+  </div>
+
+  <!-- ============ GLOSSARY ============ -->
+  <div class="section" id="glossary">
+    <h2>Glossary</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Quick definitions for terms you'll see when shopping for plans and routers.</p>
+    <div class="gloss-grid" id="glossGrid"></div>
+  </div>
+</div>
+<footer>
+  Hyderabad Internet Guide. Data sourced from ISP websites and public reviews, August 2026.<br>
+  Prices exclude GST and may change. Always verify with the provider before purchasing.
+  <div class="sig">made with love by asmgkr</div>
+</footer>
+<script>
+// ==================== ISP DATA (VERIFIED FROM ISP WEBSITES) ====================
+const ISPS=[
+  {name:"ACT Fibernet",color:"#16a34a",rating:"4.3",tags:["major","premium"],
+   usp:"Widest fiber coverage in Hyderabad. Consistent speeds. Smart Mesh routers available on select plans.",
+   url:"https://www.actcorp.in/broadband/hyderabad/broadband-plans",
+   note:"Prices as listed on actcorp.in for Hyderabad. GST extra.",
+   plans:[
+     {s:"100 Mbps",p:599,q:549,fup:"Unlimited",ott:"None"},
+     {s:"200 Mbps",p:749,q:699,fup:"Unlimited",ott:"None"},
+     {s:"300 Mbps",p:899,q:849,fup:"Unlimited",ott:"None",best:true},
+     {s:"500 Mbps",p:1199,q:1099,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",best:true},
+     {s:"1 Gbps",p:2499,q:2299,fup:"Unlimited",ott:"Jio Hotstar, Yup TV"},
+   ]},
+  {name:"Airtel Xstream Fiber",color:"#e11d48",rating:"4.4",tags:["major","premium"],
+   usp:"Best OTT bundle with 20+ streaming apps. Free router and installation. Airtel Black combo deals for mobile + broadband.",
+   url:"https://www.airtel.in/plans/broadband/hyderabad/",
+   note:"Prices verified from airtel.in/plans/broadband/hyderabad. GST extra. Plans with TV channels include INR 350 worth of DTH channels.",
+   plans:[
+     {s:"40 Mbps",p:499,q:449,fup:"Unlimited",ott:"Google One only"},
+     {s:"40 Mbps + TV",p:699,q:649,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
+     {s:"100 Mbps",p:799,q:749,fup:"Unlimited",ott:"Google One only"},
+     {s:"100 Mbps + TV",p:899,q:849,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
+     {s:"100 Mbps + Netflix",p:999,q:933,fup:"Unlimited",ott:"Netflix + Amazon Prime + Apple TV + JioHotstar + 3 more",best:true},
+     {s:"300 Mbps + TV + Netflix",p:1599,q:1499,fup:"Unlimited",ott:"TV + Netflix + Amazon Prime + Apple TV + JioHotstar + 4 more",best:true},
+     {s:"1 Gbps + TV + Netflix Premium",p:3999,q:3699,fup:"Unlimited",ott:"TV + Netflix Premium + Amazon Prime + Apple TV + Apollo 24|7 + 5 more"},
+   ]},
+  {name:"JioFiber",color:"#2563eb",rating:"4.2",tags:["major","budget"],
+   usp:"Cheapest entry price at INR 399. Free 4K Set-top Box with postpaid plans. Voice calls included on all plans.",
+   url:"https://www.jio.com/fiber/en-in/broadband-plans/hyderabad/",
+   note:"Prices from jio.com for Hyderabad prepaid plans. GST extra. Free 4K Set-top Box on postpaid. INR 1,000 installation charge for prepaid.",
+   plans:[
+     {s:"30 Mbps",p:399,q:366,fup:"Unlimited",ott:"None"},
+     {s:"100 Mbps",p:699,q:649,fup:"Unlimited",ott:"None",best:true},
+     {s:"150 Mbps",p:999,q:933,fup:"Unlimited",ott:"14+ OTT (Amazon Prime, Disney+ Hotstar, etc.)",best:true},
+     {s:"300 Mbps",p:1499,q:1399,fup:"Unlimited",ott:"14+ OTT (Netflix, Amazon Prime, Disney+ Hotstar, etc.)"},
+   ]},
+  {name:"Excitel Broadband",color:"#7c3aed",rating:"4.1",tags:["budget","major"],
+   usp:"No FUP on all plans. Cheapest high-speed option. Cable Cutter plans include 22 OTT apps and 250+ live TV channels.",
+   url:"https://www.excitel.com/broadband-plans/hyderabad/",
+   note:"All prices below are 12-month commitment rates (cheapest option). 3-month prices are higher. Cable Cutter plans include OTT + Live TV. WiFi-only plans are cheaper but no OTT.",
+   plans:[
+     {s:"200 Mbps WiFi only",p:466,q:466,fup:"Unlimited",ott:"None"},
+     {s:"300 Mbps WiFi only",p:516,q:516,fup:"Unlimited",ott:"None"},
+     {s:"200 Mbps + OTT",p:699,q:699,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
+     {s:"300 Mbps + OTT",p:724,q:724,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
+   ]},
+  {name:"BSNL Bharat Fiber",color:"#ca8a04",rating:"3.8",tags:["budget"],
+   usp:"Government-backed. Free installation on most plans. Unlimited local and STD calls included.",
+   url:"https://www.bsnl.co.in/broadband/bharatfiber",
+   note:"Prices from plansinfo.com/bsnl-ftth. All plans have FUP limits (not truly unlimited). After FUP, speed drops to 2-10 Mbps. No 200+ Mbps or 1 Gbps plans currently available.",
+   plans:[
+     {s:"40 Mbps",p:399,q:366,fup:"1400 GB/mo",ott:"None"},
+     {s:"100 Mbps",p:599,q:549,fup:"4000 GB/mo",ott:"None",best:true},
+     {s:"150 Mbps",p:799,q:733,fup:"4000 GB/mo",ott:"None"},
+   ]},
+  {name:"Tata Play Fiber",color:"#0891b2",rating:"4.0",tags:["premium"],
+   usp:"Premium OTT bundles. DTH + Fiber combo deals. Free WiFi 6 ONT on some plans.",
+   url:"https://www.tataplayfiber.com/",
+   note:"Limited availability in Hyderabad. Plans and pricing vary by city. Check tataplayfiber.com for Hyderabad-specific plans.",
+   plans:[
+     {s:"50 Mbps",p:749,q:699,fup:"Unlimited",ott:"Basic OTT"},
+     {s:"100 Mbps",p:850,q:799,fup:"Unlimited",ott:"10+ OTT Apps"},
+     {s:"300 Mbps",p:1500,q:1399,fup:"Unlimited",ott:"Premium OTT Bundle",best:true},
+     {s:"1 Gbps",p:3500,q:3266,fup:"Unlimited",ott:"All Premium OTT"},
+   ]},
+  {name:"Hathway",color:"#ea580c",rating:"3.9",tags:["budget"],
+   usp:"Cable TV + Internet bundles. Dish TV combo available. Affordable entry plans.",
+   url:"https://www.hathway.com/Broadband/HomeBroadband/Hyderabad",
+   note:"Coverage in Hyderabad may be limited. Plans with Dish TV combo available in some areas. Check hathway.com for availability.",
+   plans:[
+     {s:"40 Mbps",p:524,q:499,fup:"500 GB",ott:"6 OTT Apps"},
+     {s:"100 Mbps",p:749,q:699,fup:"1000 GB",ott:"6 OTT Apps"},
+     {s:"150 Mbps",p:899,q:849,fup:"Unlimited",ott:"6 OTT + DTH"},
+   ]},
+];
+
+// ==================== RENDER ISPs ====================
+function renderISPs(filter="all"){
+  const g=document.getElementById("ispList");g.innerHTML="";
+  const list=filter==="all"?ISPS:ISPS.filter(i=>i.tags.includes(filter));
+  list.forEach((isp,idx)=>{
+    const bestP=isp.plans.reduce((a,b)=>a.q<b.q?a:b);
+    const chips=isp.plans.map(p=>`
+      <div class="plan-chip${p.best?" best":""}">
+        <div class="pc-speed">${p.s}</div>
+        <div class="pc-price">INR ${p.p}/mo</div>
+        <div class="pc-ott">${p.ott!=="None"?p.ott:""}</div>
+        <div class="pc-fup">${p.fup} FUP</div>
+      </div>`).join("");
+    g.innerHTML+=`
+      <div class="isp-row fade-in" id="isp-${idx}">
+        <div class="isp-summary" onclick="toggleISP(${idx})">
+          <div class="isp-dot" style="background:${isp.color}">${isp.name[0]}</div>
+          <div class="isp-info">
+            <div class="isp-nm">${isp.name}</div>
+            <div class="isp-desc">${isp.usp}</div>
+          </div>
+          <div class="isp-best">
+            <div class="price">INR ${bestP.q}/mo</div>
+            <div class="lbl">best value</div>
+          </div>
+          <div class="isp-rating">⭐ ${isp.rating}</div>
+          <div class="isp-arrow">▶</div>
+        </div>
+        <div class="isp-details">
+          <div class="plan-grid">${chips}</div>
+          <div class="isp-note">${isp.note}</div>
+          <div class="isp-actions">
+            <a class="visit-link" href="${isp.url}" target="_blank" rel="noopener">Visit ${isp.name.split(" ")[0]} website</a>
+            <span style="font-size:.72rem;color:var(--muted)">Prices excl. GST. "Best value" = lowest quarterly rate.</span>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+function toggleISP(idx){document.getElementById("isp-"+idx).classList.toggle("open")}
+document.getElementById("ispTabs").onclick=e=>{
+  if(!e.target.classList.contains("tab"))return;
+  document.querySelectorAll("#ispTabs .tab").forEach(t=>t.classList.remove("on"));
+  e.target.classList.add("on");
+  renderISPs(e.target.dataset.f);
+};
+renderISPs();
+
+// ==================== COMPARISON (VERIFIED) ====================
+const CMP=[
+  // [ISP, speed, monthly, notes, FUP, OTT, speedNum]
+  // Under 50 Mbps
+  ["JioFiber","30 Mbps",399,"Prepaid +GST","Unlimited","None",30],
+  ["BSNL","40 Mbps",399,"+GST","1400 GB/mo","None",40],
+  ["Airtel","40 Mbps",499,"+GST","Unlimited","Google One only",40],
+  ["Hathway","40 Mbps",524,"Quarterly plan","500 GB","6 OTT",40],
+  // 100 Mbps
+  ["Excitel","200 Mbps",466,"12mo wifi-only","Unlimited","None",200],
+  ["JioFiber","100 Mbps",699,"Prepaid +GST","Unlimited","None",100],
+  ["BSNL","100 Mbps",599,"+GST","4000 GB/mo","None",100],
+  ["ACT","100 Mbps",599,"","Unlimited","None",100],
+  ["Airtel","100 Mbps",799,"+GST","Unlimited","Google One only",100],
+  ["Hathway","100 Mbps",749,"Quarterly plan","1000 GB","6 OTT",100],
+  ["Tata Play","100 Mbps",850,"Check availability","Unlimited","10+ OTT",100],
+  // 150-200 Mbps
+  ["JioFiber","150 Mbps",999,"Prepaid +GST","Unlimited","14+ OTT",150],
+  ["Excitel","200 Mbps",699,"12mo + OTT","Unlimited","22 OTT + Live TV",200],
+  ["ACT","200 Mbps",749,"","Unlimited","None",200],
+  ["BSNL","150 Mbps",799,"+GST","4000 GB/mo","None",150],
+  ["Airtel","100 Mbps",999,"+GST, Netflix bundle","Unlimited","Netflix + Amazon + Apple TV + 4 more",100],
+  ["Hathway","150 Mbps",899,"Quarterly plan","Unlimited","6 OTT + DTH",150],
+  // 300 Mbps
+  ["Excitel","300 Mbps",724,"12mo + OTT","Unlimited","22 OTT + Live TV",300],
+  ["ACT","300 Mbps",899,"","Unlimited","None",300],
+  ["JioFiber","300 Mbps",1499,"Prepaid +GST","Unlimited","Netflix + Amazon + 14 OTT",300],
+  ["Airtel","300 Mbps",1599,"+GST, TV + Netflix","Unlimited","TV + Netflix + Amazon + Apple TV + 5 more",300],
+  ["Tata Play","300 Mbps",1500,"Check availability","Unlimited","Premium OTT",300],
+  // 500 Mbps
+  ["ACT","500 Mbps",1199,"","Unlimited","Jio Hotstar + Yup TV",500],
+  ["Tata Play","500 Mbps",1900,"Check availability","Unlimited","Premium OTT",500],
+  // 1 Gbps
+  
+  ["ACT","1 Gbps",2499,"","Unlimited","Jio Hotstar + Yup TV",1000],
+  ["Tata Play","1 Gbps",3500,"Check availability","Unlimited","All Premium OTT",1000],
+  ["Airtel","1 Gbps",3999,"+GST, TV + Netflix Premium","Unlimited","TV + Netflix Premium + Amazon + Apple TV + Apollo 24|7 + 5 more",1000],
+];
+function renderCmp(filter="all"){
+  const b=document.getElementById("cmpBody");b.innerHTML="";
+  let data=filter==="all"?[...CMP]:CMP.filter(r=>{
+    const n=r[6];
+    if(filter==="50")return n<=50;
+    if(filter==="100")return n>50&&n<=100;
+    if(filter==="200")return n>100&&n<=200;
+    if(filter==="300")return n>200&&n<=300;
+    if(filter==="500")return n>300&&n<=500;
+    if(filter==="1000")return n>500;
+    return true;
+  });
+  const bySpeed={};
+  data.forEach(r=>{if(r[2]==="N/A")return;const k=r[6];if(!bySpeed[k]||r[2]<bySpeed[k])bySpeed[k]=r[2];});
+  data.sort((a,b)=>{if(a[2]==="N/A")return 1;if(b[2]==="N/A")return -1;return a[2]-b[2];});
+  data.forEach(r=>{
+    const cheap=r[2]!=="N/A"&&r[2]===bySpeed[r[6]];
+    b.innerHTML+=`<tr>
+      <td style="font-weight:600">${r[0]}</td>
+      <td>${r[1]}</td>
+      <td class="${cheap?"cheapest":""}">${r[2]==="N/A"?"N/A":"INR "+r[2]}</td>
+      <td style="color:var(--muted);font-size:.75rem">${r[3]}</td>
+      <td>${r[4]}</td>
+      <td style="color:var(--orange);font-size:.78rem">${r[5]}</td>
+    </tr>`;
+  });
+}
+document.getElementById("cmpTabs").onclick=e=>{
+  if(!e.target.classList.contains("tab"))return;
+  document.querySelectorAll("#cmpTabs .tab").forEach(t=>t.classList.remove("on"));
+  e.target.classList.add("on");
+  renderCmp(e.target.dataset.s);
+};
+renderCmp();
+
+// ==================== ROUTER FINDER ====================
+const ROUTERS=[
+  {n:"TP-Link Archer C6",w:"Wi-Fi 5 AC1200",spd:[30,50,100],sz:["small"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:2500,price:2000,note:"Budget pick for small flats. Solid for browsing and streaming."},
+  {n:"TP-Link Archer AX12",w:"Wi-Fi 6 AX1500",spd:[30,50,100],sz:["small","medium"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:4000,price:3200,note:"Entry-level Wi-Fi 6. Good future-proofing on a budget."},
+  {n:"TP-Link Archer AX23",w:"Wi-Fi 6 AX1800",spd:[50,100,200],sz:["small","medium"],wall:"medium",use:["basic","streaming","work"],dev:["few","mod"],budget:6000,price:4800,note:"Solid all-rounder. Good range and 5 GHz performance."},
+  {n:"TP-Link Archer AX53",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming"],dev:["mod","many"],budget:8000,price:5999,note:"Best value for money. 160 MHz channel gives excellent 5 GHz speeds."},
+  {n:"TP-Link Archer AX73",w:"Wi-Fi 6 AX5400",spd:[200,300,500,1000],sz:["medium","large","villa"],wall:"high",use:["streaming","gaming","work","power"],dev:["mod","many","lots"],budget:12000,price:8000,note:"Best for gigabit plans. 4x4 MIMO gets close to gigabit wirelessly."},
+  {n:"ASUS RT-AX58U",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["gaming","work"],dev:["mod","many"],budget:12000,price:8500,note:"Best firmware and management. AiMesh expandable."},
+  {n:"TP-Link Archer AX72 Pro",w:"Wi-Fi 6 AX5400 + 2.5G",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:15000,price:11000,note:"AX73 plus a 2.5G Ethernet port. Future-proof for multi-gig."},
+  {n:"ASUS RT-AX86U Pro",w:"Wi-Fi 6 AX5700",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:23000,note:"Premium gaming router. WPA3, AiMesh, adaptive QoS."},
+  {n:"TP-Link Archer BE230",w:"Wi-Fi 7 BE3600",spd:[200,300,500,1000],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming","power"],dev:["mod","many","lots"],budget:12000,price:9000,note:"Best future-proof pick. Wi-Fi 7 with dual 2.5G ports at a great price."},
+  {n:"TP-Link Archer BE550",w:"Wi-Fi 7 BE9300",spd:[500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:16000,note:"Top-tier Wi-Fi 7. All 2.5G ports. Maximum future-proofing."},
+  {n:"TP-Link Deco X55 (2-pack)",w:"Wi-Fi 6 Mesh AX5400",spd:[100,200,300,500],sz:["large","villa"],wall:"high",use:["streaming","work"],dev:["mod","many"],budget:15000,price:10000,note:"Mesh system for seamless WiFi across multiple floors. Best for concrete walls."},
+  {n:"TP-Link Deco BE63 (2-pack)",w:"Wi-Fi 7 Mesh BE10000",spd:[500,1000],sz:["villa"],wall:"high",use:["power","gaming"],dev:["many","lots"],budget:30000,price:22000,note:"Premium Wi-Fi 7 mesh. Full gigabit in large multi-story homes."},
+];
+function findRouter(){
+  const spd=+document.getElementById("fSpeed").value;
+  const sz=document.getElementById("fSize").value;
+  const use=document.getElementById("fUse").value;
+  const dev=document.getElementById("fDev").value;
+  const bud=+document.getElementById("fBudget").value;
+  const wall=document.getElementById("fWall").value;
+  const scored=ROUTERS.map(r=>{
+    let s=0;
+    if(r.spd.includes(spd))s+=30;else if(r.spd.some(v=>v>=spd))s+=20;else s+=5;
+    if(r.sz.includes(sz))s+=25;else if(r.sz.includes("large")&&sz==="villa")s+=15;else if(r.sz.includes("medium")&&(sz==="large"||sz==="villa"))s+=10;else s+=5;
+    if(r.use.includes(use))s+=20;else s+=5;
+    if(r.dev.includes(dev))s+=10;else s+=3;
+    if(r.price<=bud)s+=20;else if(r.price<=bud*1.25)s+=10;else s-=10;
+    if(wall==="concrete"&&r.wall==="high")s+=15;else if(wall==="concrete"&&r.wall==="medium")s+=8;else if(wall==="brick"&&r.wall!=="low")s+=10;else if(wall==="open")s+=10;
+    return{...r,score:s};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  const top=scored.slice(0,3);
+  const estSpeed=spd>=500?"700 to 950 Mbps":spd>=200?"500 to 750 Mbps":spd>=100?"350 to 550 Mbps":"150 to 300 Mbps";
+  document.getElementById("routerOut").innerHTML=`
+    <h3 style="margin-top:1.25rem;margin-bottom:.5rem">Top picks for your setup</h3>
+    ${top.map((r,i)=>`
+      <div class="rec fade-in">
+        <div class="rec-top">
+          <div>
+            <h4>${i+1}. ${r.n}</h4>
+            <div class="rec-meta">${r.w} &middot; INR ${r.price.toLocaleString("en-IN")}${wall==="concrete"&&r.wall==="high"?" &middot; Good through concrete":""}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="rec-speed">~${estSpeed}</div>
+            <div style="font-size:.72rem;color:var(--muted)">wireless estimate</div>
+          </div>
+        </div>
+        <p class="rec-why">${r.note}</p>
+      </div>
+    `).join("")}
+    ${wall==="concrete"?`
+    <div class="tip-box">
+      <h4>Multi-floor with concrete walls?</h4>
+      <ul>
+        <li><strong>Best option:</strong> Run an Ethernet cable to the other floor and add a second router in AP (Access Point) mode, giving full speed on both floors.</li>
+        <li><strong>No cables possible?</strong> Use a powerline adapter (around INR 3,000) to send data through your electrical wiring, then connect an AP upstairs.</li>
+        <li><strong>Mesh systems</strong> (like Deco) also work. Nodes communicate wirelessly but still need some signal through the wall.</li>
+        <li><strong>Avoid repeaters and extenders.</strong> They halve your speed and struggle through concrete.</li>
+      </ul>
+    </div>`:`
+    <div class="tip-box">
+      <h4>Getting the most from your speed</h4>
+      <ul>
+        <li>Place your router centrally, elevated, and away from metal objects.</li>
+        <li>Use <strong>5 GHz</strong> for devices in the same room (faster), <strong>2.4 GHz</strong> for distant rooms (better range).</li>
+        <li>For PCs and consoles, plug in an Ethernet cable. You'll get the full speed your plan offers.</li>
+        <li>Use a WiFi analyzer app to pick the least congested channel in your area.</li>
+      </ul>
+    </div>`}
+  `;
+}
+
+// ==================== GLOSSARY ====================
+const GLOSS=[
+  ["Mbps","Megabits per second, the standard unit for internet speed. 100 Mbps is roughly 12.5 MB/s download."],
+  ["Gbps","Gigabits per second. 1 Gbps equals 1,000 Mbps. The speed tier of modern fiber plans."],
+  ["FUP","Fair Usage Policy, a data cap after which speed is reduced. BSNL plans have FUP limits; most others are truly unlimited."],
+  ["Wi-Fi 5 (802.11ac)","Previous-gen WiFi. Max around 3.5 Gbps theoretical. Still found in budget routers."],
+  ["Wi-Fi 6 (802.11ax)","Current-gen WiFi. Faster, handles more devices, better efficiency. Look for 'AX' in router names."],
+  ["Wi-Fi 7 (802.11be)","Next-gen WiFi. Up to 46 Gbps, wider channels. The future-proofing standard."],
+  ["2.4 GHz vs 5 GHz","2.4 GHz has longer range but is slower and more congested. 5 GHz is faster but shorter range."],
+  ["MU-MIMO","Lets a router talk to multiple devices at the same time instead of taking turns."],
+  ["OFDMA","Wi-Fi 6 feature that splits channels to serve many devices efficiently at once."],
+  ["Mesh Network","Multiple router nodes working as one system. Seamless roaming, great for large homes."],
+  ["Access Point (AP)","A device that creates WiFi, wired back to the main router. Used to add coverage on another floor."],
+  ["WPA3","Latest WiFi security protocol. Stronger encryption, protects against brute-force attacks."],
+  ["WPS","WiFi Protected Setup for easy device pairing. The PIN mode is vulnerable, so disable it."],
+  ["SSID","Your WiFi network name, what you see when searching for networks."],
+  ["LAN / WAN","LAN is your home network (Ethernet ports). WAN is the port that connects to your ISP's fiber."],
+  ["QoS","Quality of Service. A router feature that prioritizes certain traffic like gaming or video calls."],
+  ["Latency (Ping)","The delay between sending and receiving data. Lower is better, critical for gaming."],
+  ["Throughput","The actual measured speed, usually lower than the advertised bandwidth."],
+  ["FTTH","Fiber to the Home. Optical fiber runs directly to your house. The gold standard."],
+  ["ONT / ONU","The ISP's fiber box that converts light signals to Ethernet/WiFi for your home."],
+  ["Powerline Adapter","Sends internet through your electrical wiring. Useful when you can't run Ethernet cables."],
+  ["Ethernet","Wired connection via cable (Cat5e/Cat6). The most stable and fastest connection type."],
+  ["OTT","Over-The-Top streaming services like Netflix and Disney+, often bundled with ISP plans."],
+  ["VLAN","Virtual network segmentation. Separates device groups for security."],
+];
+document.getElementById("glossGrid").innerHTML=GLOSS.map(g=>`<dl class="gloss"><dt>${g[0]}</dt><dd>${g[1]}</dd></dl>`).join("");
+document.querySelectorAll("nav a").forEach(a=>{
+  a.addEventListener("click",e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute("href"));
+    if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+});
+</script>
+</body>
+</html>

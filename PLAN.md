@@ -1,18 +1,28 @@
 # HyderabadNet - Project Plan
 
-## What We Built (Current State)
+## What We Built (Current State — Aug 2026)
 
-A single-page HTML application with 5 sections, served as a static file.
+A single-page HTML application. Multiple design explorations were done (original clean version + three redesigns with stronger personality). Analysis concluded the right product is a **restrained, high-utility version** that keeps the best engagement features without visual or interaction overkill.
 
-### Sections
+### Core Sections (target production)
 
-| Section | Status | Coverage |
-|---------|--------|----------|
-| ISP Encyclopedia | Done | 7 ISPs with verified plans, expandable cards, direct links |
+| Section | Status | Notes |
+|---------|--------|-------|
 | Plan Comparison | Done | Speed-tier filterable table, cheapest highlighted |
-| Router Recommender | Done | Interactive wizard, 12-router database, top 3 picks |
-| Security Guide | Done | 6 threats, 8 checklist items, 4 advanced tips |
-| Glossary | Done | 24 terms with plain-English definitions |
+| ISP Encyclopedia | Done | 7 ISPs, verified plans, expandable cards, direct links |
+| Neighborhood flavor | Light | Simple tips / scores for major areas (real data still thin) |
+| Router Recommender | Done | Multi-step wizard, ~12 routers, accounts for walls + devices + budget |
+| Roast my internet | **New / Keep** | High-engagement diagnostic — the best addition from redesigns |
+| Security Audit | Done + upgraded | Interactive score/grade + checklist |
+| Glossary | Done | Plain-English definitions |
+
+### Design Direction (locked)
+
+- Base on the warm paper + lime aesthetic from the first redesign (cream background, Space Grotesk + Inter).
+- Floating pill nav is good.
+- Keep personality and slightly spicy local voice.
+- **Remove / avoid:** heavy animated SVG network map, full-screen quiz overlay, hard neo-brutalist shadows everywhere, fake “X reports” numbers, competing design systems, 3+ Google font families.
+- Goal: feels like a sharp local tool, not a design showcase.
 
 ### ISP Data (Verified Against Websites)
 
@@ -28,38 +38,33 @@ A single-page HTML application with 5 sections, served as a static file.
 
 ### What's Covered
 
-- Plan speeds, monthly and quarterly pricing, FUP limits, OTT bundles
-- Direct links to each ISP's Hyderabad plans page
+- Plan speeds, monthly/quarterly pricing, FUP, OTT bundles
+- Direct links to ISP Hyderabad plans pages
 - Router recommendations matched to speed, home size, usage, devices, budget, wall type
-- Concrete wall / multi-floor WiFi advice
-- WiFi security threats and hardening checklist
-- Networking glossary (24 terms)
-- No em-dashes, clean minimal design, "made with love by asmgkr" branding
+- Concrete wall / multi-floor advice
+- Interactive “Roast my internet” diagnostic
+- Security score + hardening checklist
+- Networking glossary
+- Strong local voice, “made with love by asmgkr”
 
-### What's Missing
+### What's Missing (prioritized)
 
-**Content:**
-- No locality/area-wise ISP availability (Gachibowli, Kukatpally, etc.)
-- No ISP-specific setup guides (how to change password on ACT router, etc.)
-- No installation charges, security deposits, hidden fees breakdown
-- No upload speed comparison (matters for WFH)
-- No needs calculator (usage patterns to recommended speed tier)
-- No inline jargon tooltips in other sections
-- No local LCO (Local Cable Operator) listings
+**High priority (do next):**
+1. Real locality / area-wise ISP availability & reliability notes (Gachibowli, Madhapur, Kukatpally, etc.)
+2. Upload speed comparison (critical for WFH)
+3. Installation charges, deposits, hidden fees
+4. Affiliate links (Amazon + Flipkart + ISP referrals) so the project can earn
+5. SEO meta + Open Graph + basic analytics (Phase 1)
 
-**Technical:**
-- All data hardcoded in HTML, no CMS or update mechanism
-- No SEO meta tags, Open Graph, structured data
-- No analytics
-- No search functionality
-- No "save comparison" or "share results"
-- No affiliate links
+**Medium:**
+- Needs calculator (usage → recommended speed tier)
+- ISP-specific setup guides (change password, enable WPA3, etc.)
+- Share / save comparison results
 
-**Product:**
-- No email capture or newsletter
-- No user feedback mechanism
-- No ISP availability checker
-- No speed test integration
+**Later:**
+- User-submitted speed data by area
+- Newsletter / feedback
+- LCO listings
 
 ---
 
@@ -133,80 +138,53 @@ A single-page HTML application with 5 sections, served as a static file.
 
 ## Roadmap: From HTML to Real Product
 
-### Phase 1: Deploy and Share (Week 1)
+### Phase 0: Consolidate (NOW — in progress)
 
-**Goal:** Get the site live and gather feedback.
+**Goal:** Ship one strong production file instead of four competing versions.
 
-- [ ] Create GitHub repo and deploy to GitHub Pages
-- [ ] Add SEO meta tags (title, description, Open Graph)
-- [ ] Add Google Analytics (free)
-- [ ] Share with 10-15 friends in Hyderabad for feedback
-- [ ] Post in r/hyderabad and local tech communities
+- [x] Analyze original vs redesigns — identify what sits right vs overkill
+- [x] Lock design direction (restrained warm paper + lime + personality + Roast)
+- [ ] Produce single clean production `index.html`
+- [ ] Strip overkill (heavy SVG map, quiz overlay, fake report counts)
+- [ ] Confirm SEO meta + Open Graph are solid
+- [ ] Update this PLAN.md
 
-**Effort:** 1-2 days
+### Phase 1: Deploy and Share (next)
 
-### Phase 2: Monetize (Week 1-2)
+**Goal:** Get the site live and gather real feedback.
 
-**Goal:** Add affiliate links to start earning from day one.
+- [x] GitHub repo exists (`abhishekSF/asmgkr-internet-guide`)
+- [ ] Push consolidated `index.html` + updated PLAN
+- [ ] Enable GitHub Pages
+- [ ] Add Google Analytics (or Plausible / Umami)
+- [ ] Share with 10–15 friends in Hyderabad
+- [ ] Post in r/hyderabad + local WhatsApp/Telegram tech groups
 
-- [ ] Sign up for Amazon Associates India
-- [ ] Sign up for Flipkart Affiliate
-- [ ] Add "Buy on Amazon" / "Buy on Flipkart" buttons to router cards
-- [ ] Add ISP referral links (Airtel, Jio partner programs)
-- [ ] Add a "Support this project" section (optional)
+**Effort:** 1 day once file is ready
 
-**Effort:** 1-2 days
+### Phase 2: Monetize + Data Depth (parallel)
 
-### Phase 3: Interactive Features (Week 2-4)
+**Goal:** Make it earn and make locality advice trustworthy.
 
-**Goal:** Add the needs calculator and improve UX.
+- [ ] Amazon Associates India + Flipkart Affiliate → “Buy on Amazon” on router cards
+- [ ] ISP referral links where available
+- [ ] Real locality notes for 10–15 major areas (availability + common complaints)
+- [ ] Add upload speeds to comparison table
+- [ ] Installation charges / deposit notes per ISP
 
-- [ ] Build needs calculator: "How many people? How many streams? Devices?" to recommended speed tier
-- [ ] Add ISP matching: recommended speed tier to best plans across ISPs
-- [ ] Add inline jargon tooltips throughout the page
-- [ ] Add "Share this comparison" button
-- [ ] Improve mobile experience
+### Phase 3: Interactive Depth
 
-**Effort:** 5-7 days
+- [ ] Needs calculator (people + streams + devices → recommended speed)
+- [ ] Better share results (roast score, security grade, comparison)
+- [ ] Inline jargon tooltips
+- [ ] ISP-specific setup guides (ACT / Airtel / Jio password + WPA3)
 
-### Phase 4: Locality Data (Month 2)
+### Phase 4+: Advanced
 
-**Goal:** Solve the "which ISP actually works in my area" problem.
-
-- [ ] Manually curate ISP availability for major Hyderabad areas:
-  - HITEC City / Gachibowli / Financial District
-  - Kondapur / Madhapur / Kukatpally
-  - Secunderabad / Trimulgherry / Bowenpally
-  - LB Nagar / Uppal / Nagole
-  - Banjara Hills / Jubilee Hills / Ameerpet
-- [ ] Add area selector dropdown
-- [ ] Show available ISPs + recommended plan for each area
-- [ ] Start with 15-20 major areas, expand over time
-
-**Effort:** 7-10 days (mostly research)
-
-### Phase 5: ISP Setup Guides (Month 2-3)
-
-**Goal:** Help users configure their ISP-provided router.
-
-- [ ] ACT Fibernet router setup guide (common router models)
-- [ ] Airtel Xstream router setup guide
-- [ ] JioFiber router setup guide
-- [ ] Each guide: how to login, change password, enable WPA3, disable WPS, set up guest network
-- [ ] Link from security section to relevant ISP guide
-
-**Effort:** 5-7 days
-
-### Phase 6: Advanced Features (Month 3+)
-
-**Goal:** Differentiate from competitors.
-
-- [ ] User-submitted speed test data by area
-- [ ] ISP comparison by real-world performance (uptime, support quality)
-- [ ] Installation cost breakdown per ISP
-- [ ] Upload speed comparison
-- [ ] Newsletter for plan updates
-- [ ] Consider upgrading to Next.js/Astro if traffic warrants it
+- User-submitted speed data by area
+- Performance / support quality notes
+- Newsletter for plan price changes
+- Consider Astro/Next only if traffic and update frequency justify it
 
 ---
 

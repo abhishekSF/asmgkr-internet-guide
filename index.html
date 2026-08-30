@@ -23,7 +23,7 @@
   nav .credit{margin-left:auto;font-size:.72rem;color:var(--muted);white-space:nowrap}
   .wrap{max-width:1000px;margin:0 auto;padding:0 1.5rem}
   h2{font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
-  .section{margin-bottom:2.5rem;padding-top:1.5rem}
+  .section{margin-bottom:2.5rem;padding-top:1.5rem;scroll-margin-top:60px}
   .hero{padding:3rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:.5rem}
   .hero h1{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.3;margin-bottom:.75rem}
   .hero h1 .hl{color:var(--blue)}
@@ -163,7 +163,7 @@
   <!-- ============ COMPARE ============ -->
   <div class="section" id="compare">
     <h2>Compare Plans Side by Side</h2>
-    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Best value plan per speed tier from each ISP. Green means cheapest at that speed. Excitel prices are 12-month commitment rates.</p>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Every plan from every provider, grouped by speed tier. Green means cheapest at that exact speed. Excitel prices are 12-month commitment rates.</p>
     <div class="tabs" id="cmpTabs">
       <button class="tab on" data-s="all">All Speeds</button>
       <button class="tab" data-s="50">Under 50</button>
@@ -244,81 +244,95 @@
   <div class="sig">made with love by asmgkr</div>
 </footer>
 <script>
-// ==================== ISP DATA (VERIFIED FROM ISP WEBSITES) ====================
+// ==================== ISP DATA (SINGLE SOURCE OF TRUTH) ====================
+// Every plan lives here once. The ISP cards AND the comparison table are both
+// derived from this array, so a price can never disagree between the two views.
+// Per-plan fields: s=speed label, p=monthly INR, q=quarterly INR, fup, ott,
+// best=highlight in ISP card, cmpNote=short note shown in the comparison table.
 const ISPS=[
-  {name:"ACT Fibernet",color:"#16a34a",rating:"4.3",tags:["major","premium"],
+  {name:"ACT Fibernet",abbr:"ACT",color:"#16a34a",rating:"4.3",tags:["major","premium"],
    usp:"Widest fiber coverage in Hyderabad. Consistent speeds. Smart Mesh routers available on select plans.",
    url:"https://www.actcorp.in/broadband/hyderabad/broadband-plans",
    note:"Prices as listed on actcorp.in for Hyderabad. GST extra.",
    plans:[
-     {s:"100 Mbps",p:599,q:549,fup:"Unlimited",ott:"None"},
-     {s:"200 Mbps",p:749,q:699,fup:"Unlimited",ott:"None"},
-     {s:"300 Mbps",p:899,q:849,fup:"Unlimited",ott:"None",best:true},
-     {s:"500 Mbps",p:1199,q:1099,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",best:true},
-     {s:"1 Gbps",p:2499,q:2299,fup:"Unlimited",ott:"Jio Hotstar, Yup TV"},
+     {s:"100 Mbps",p:599,q:549,fup:"Unlimited",ott:"None",cmpNote:""},
+     {s:"200 Mbps",p:749,q:699,fup:"Unlimited",ott:"None",cmpNote:""},
+     {s:"300 Mbps",p:899,q:849,fup:"Unlimited",ott:"None",best:true,cmpNote:""},
+     {s:"500 Mbps",p:1199,q:1099,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",best:true,cmpNote:""},
+     {s:"1 Gbps",p:2499,q:2299,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",cmpNote:""},
    ]},
-  {name:"Airtel Xstream Fiber",color:"#e11d48",rating:"4.4",tags:["major","premium"],
+  {name:"Airtel Xstream Fiber",abbr:"Airtel",color:"#e11d48",rating:"4.4",tags:["major","premium"],
    usp:"Best OTT bundle with 20+ streaming apps. Free router and installation. Airtel Black combo deals for mobile + broadband.",
    url:"https://www.airtel.in/plans/broadband/hyderabad/",
    note:"Prices verified from airtel.in/plans/broadband/hyderabad. GST extra. Plans with TV channels include INR 350 worth of DTH channels.",
    plans:[
-     {s:"40 Mbps",p:499,q:449,fup:"Unlimited",ott:"Google One only"},
-     {s:"40 Mbps + TV",p:699,q:649,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
-     {s:"100 Mbps",p:799,q:749,fup:"Unlimited",ott:"Google One only"},
-     {s:"100 Mbps + TV",p:899,q:849,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
-     {s:"100 Mbps + Netflix",p:999,q:933,fup:"Unlimited",ott:"Netflix + Amazon Prime + Apple TV + JioHotstar + 3 more",best:true},
-     {s:"300 Mbps + TV + Netflix",p:1599,q:1499,fup:"Unlimited",ott:"TV + Netflix + Amazon Prime + Apple TV + JioHotstar + 4 more",best:true},
-     {s:"1 Gbps + TV + Netflix Premium",p:3999,q:3699,fup:"Unlimited",ott:"TV + Netflix Premium + Amazon Prime + Apple TV + Apollo 24|7 + 5 more"},
+     {s:"40 Mbps",p:499,q:449,fup:"Unlimited",ott:"Google One only",cmpNote:"+GST"},
+     {s:"40 Mbps + TV",p:699,q:649,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream",cmpNote:"+GST, TV bundle"},
+     {s:"100 Mbps",p:799,q:749,fup:"Unlimited",ott:"Google One only",cmpNote:"+GST"},
+     {s:"100 Mbps + TV",p:899,q:849,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream",cmpNote:"+GST, TV bundle"},
+     {s:"100 Mbps + Netflix",p:999,q:933,fup:"Unlimited",ott:"Netflix + Amazon Prime + Apple TV + JioHotstar + 3 more",best:true,cmpNote:"+GST, Netflix bundle"},
+     {s:"300 Mbps + TV + Netflix",p:1599,q:1499,fup:"Unlimited",ott:"TV + Netflix + Amazon Prime + Apple TV + JioHotstar + 4 more",best:true,cmpNote:"+GST, TV + Netflix"},
+     {s:"1 Gbps + TV + Netflix Premium",p:3999,q:3699,fup:"Unlimited",ott:"TV + Netflix Premium + Amazon Prime + Apple TV + Apollo 24|7 + 5 more",cmpNote:"+GST, TV + Netflix Premium"},
    ]},
-  {name:"JioFiber",color:"#2563eb",rating:"4.2",tags:["major","budget"],
+  {name:"JioFiber",abbr:"JioFiber",color:"#2563eb",rating:"4.2",tags:["major","budget"],
    usp:"Cheapest entry price at INR 399. Free 4K Set-top Box with postpaid plans. Voice calls included on all plans.",
    url:"https://www.jio.com/fiber/en-in/broadband-plans/hyderabad/",
    note:"Prices from jio.com for Hyderabad prepaid plans. GST extra. Free 4K Set-top Box on postpaid. INR 1,000 installation charge for prepaid.",
    plans:[
-     {s:"30 Mbps",p:399,q:366,fup:"Unlimited",ott:"None"},
-     {s:"100 Mbps",p:699,q:649,fup:"Unlimited",ott:"None",best:true},
-     {s:"150 Mbps",p:999,q:933,fup:"Unlimited",ott:"14+ OTT (Amazon Prime, Disney+ Hotstar, etc.)",best:true},
-     {s:"300 Mbps",p:1499,q:1399,fup:"Unlimited",ott:"14+ OTT (Netflix, Amazon Prime, Disney+ Hotstar, etc.)"},
+     {s:"30 Mbps",p:399,q:366,fup:"Unlimited",ott:"None",cmpNote:"Prepaid +GST"},
+     {s:"100 Mbps",p:699,q:649,fup:"Unlimited",ott:"None",best:true,cmpNote:"Prepaid +GST"},
+     {s:"150 Mbps",p:999,q:933,fup:"Unlimited",ott:"14+ OTT (Amazon Prime, Disney+ Hotstar, etc.)",best:true,cmpNote:"Prepaid +GST"},
+     {s:"300 Mbps",p:1499,q:1399,fup:"Unlimited",ott:"14+ OTT (Netflix, Amazon Prime, Disney+ Hotstar, etc.)",cmpNote:"Prepaid +GST"},
    ]},
-  {name:"Excitel Broadband",color:"#7c3aed",rating:"4.1",tags:["budget","major"],
+  {name:"Excitel Broadband",abbr:"Excitel",color:"#7c3aed",rating:"4.1",tags:["budget","major"],
    usp:"No FUP on all plans. Cheapest high-speed option. Cable Cutter plans include 22 OTT apps and 250+ live TV channels.",
    url:"https://www.excitel.com/broadband-plans/hyderabad/",
    note:"All prices below are 12-month commitment rates (cheapest option). 3-month prices are higher. Cable Cutter plans include OTT + Live TV. WiFi-only plans are cheaper but no OTT.",
    plans:[
-     {s:"200 Mbps WiFi only",p:466,q:466,fup:"Unlimited",ott:"None"},
-     {s:"300 Mbps WiFi only",p:516,q:516,fup:"Unlimited",ott:"None"},
-     {s:"200 Mbps + OTT",p:699,q:699,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
-     {s:"300 Mbps + OTT",p:724,q:724,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
+     {s:"200 Mbps WiFi only",p:466,q:466,fup:"Unlimited",ott:"None",cmpNote:"12mo wifi-only"},
+     {s:"300 Mbps WiFi only",p:516,q:516,fup:"Unlimited",ott:"None",cmpNote:"12mo wifi-only"},
+     {s:"200 Mbps + OTT",p:699,q:699,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true,cmpNote:"12mo + OTT"},
+     {s:"300 Mbps + OTT",p:724,q:724,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true,cmpNote:"12mo + OTT"},
    ]},
-  {name:"BSNL Bharat Fiber",color:"#ca8a04",rating:"3.8",tags:["budget"],
+  {name:"BSNL Bharat Fiber",abbr:"BSNL",color:"#ca8a04",rating:"3.8",tags:["budget"],
    usp:"Government-backed. Free installation on most plans. Unlimited local and STD calls included.",
    url:"https://www.bsnl.co.in/broadband/bharatfiber",
    note:"Prices from plansinfo.com/bsnl-ftth. All plans have FUP limits (not truly unlimited). After FUP, speed drops to 2-10 Mbps. No 200+ Mbps or 1 Gbps plans currently available.",
    plans:[
-     {s:"40 Mbps",p:399,q:366,fup:"1400 GB/mo",ott:"None"},
-     {s:"100 Mbps",p:599,q:549,fup:"4000 GB/mo",ott:"None",best:true},
-     {s:"150 Mbps",p:799,q:733,fup:"4000 GB/mo",ott:"None"},
+     {s:"40 Mbps",p:399,q:366,fup:"1400 GB/mo",ott:"None",cmpNote:"+GST"},
+     {s:"100 Mbps",p:599,q:549,fup:"4000 GB/mo",ott:"None",best:true,cmpNote:"+GST"},
+     {s:"150 Mbps",p:799,q:733,fup:"4000 GB/mo",ott:"None",cmpNote:"+GST"},
    ]},
-  {name:"Tata Play Fiber",color:"#0891b2",rating:"4.0",tags:["premium"],
+  {name:"Tata Play Fiber",abbr:"Tata Play",color:"#0891b2",rating:"4.0",tags:["premium"],
    usp:"Premium OTT bundles. DTH + Fiber combo deals. Free WiFi 6 ONT on some plans.",
    url:"https://www.tataplayfiber.com/",
    note:"Limited availability in Hyderabad. Plans and pricing vary by city. Check tataplayfiber.com for Hyderabad-specific plans.",
    plans:[
-     {s:"50 Mbps",p:749,q:699,fup:"Unlimited",ott:"Basic OTT"},
-     {s:"100 Mbps",p:850,q:799,fup:"Unlimited",ott:"10+ OTT Apps"},
-     {s:"300 Mbps",p:1500,q:1399,fup:"Unlimited",ott:"Premium OTT Bundle",best:true},
-     {s:"1 Gbps",p:3500,q:3266,fup:"Unlimited",ott:"All Premium OTT"},
+     {s:"50 Mbps",p:749,q:699,fup:"Unlimited",ott:"Basic OTT",cmpNote:"Check availability"},
+     {s:"100 Mbps",p:850,q:799,fup:"Unlimited",ott:"10+ OTT Apps",cmpNote:"Check availability"},
+     {s:"300 Mbps",p:1500,q:1399,fup:"Unlimited",ott:"Premium OTT Bundle",best:true,cmpNote:"Check availability"},
+     {s:"500 Mbps",p:1900,q:1799,fup:"Unlimited",ott:"Premium OTT Bundle",cmpNote:"Check availability"},
+     {s:"1 Gbps",p:3500,q:3266,fup:"Unlimited",ott:"All Premium OTT",cmpNote:"Check availability"},
    ]},
-  {name:"Hathway",color:"#ea580c",rating:"3.9",tags:["budget"],
+  {name:"Hathway",abbr:"Hathway",color:"#ea580c",rating:"3.9",tags:["budget"],
    usp:"Cable TV + Internet bundles. Dish TV combo available. Affordable entry plans.",
    url:"https://www.hathway.com/Broadband/HomeBroadband/Hyderabad",
    note:"Coverage in Hyderabad may be limited. Plans with Dish TV combo available in some areas. Check hathway.com for availability.",
    plans:[
-     {s:"40 Mbps",p:524,q:499,fup:"500 GB",ott:"6 OTT Apps"},
-     {s:"100 Mbps",p:749,q:699,fup:"1000 GB",ott:"6 OTT Apps"},
-     {s:"150 Mbps",p:899,q:849,fup:"Unlimited",ott:"6 OTT + DTH"},
+     {s:"40 Mbps",p:524,q:499,fup:"500 GB",ott:"6 OTT Apps",cmpNote:"Quarterly plan"},
+     {s:"100 Mbps",p:749,q:699,fup:"1000 GB",ott:"6 OTT Apps",cmpNote:"Quarterly plan"},
+     {s:"150 Mbps",p:899,q:849,fup:"Unlimited",ott:"6 OTT + DTH",cmpNote:"Quarterly plan"},
    ]},
 ];
+
+// Parse a numeric Mbps value out of a speed label ("1 Gbps" -> 1000, "200 Mbps WiFi only" -> 200).
+function speedNum(label){
+  const m=String(label).match(/([\d.]+)\s*(Gbps|Mbps)/i);
+  if(!m)return 0;
+  let v=parseFloat(m[1]);
+  if(/gbps/i.test(m[2]))v*=1000;
+  return v;
+}
 
 // ==================== RENDER ISPs ====================
 function renderISPs(filter="all"){
@@ -368,48 +382,22 @@ document.getElementById("ispTabs").onclick=e=>{
 };
 renderISPs();
 
-// ==================== COMPARISON (VERIFIED) ====================
-const CMP=[
-  // [ISP, speed, monthly, notes, FUP, OTT, speedNum]
-  // Under 50 Mbps
-  ["JioFiber","30 Mbps",399,"Prepaid +GST","Unlimited","None",30],
-  ["BSNL","40 Mbps",399,"+GST","1400 GB/mo","None",40],
-  ["Airtel","40 Mbps",499,"+GST","Unlimited","Google One only",40],
-  ["Hathway","40 Mbps",524,"Quarterly plan","500 GB","6 OTT",40],
-  // 100 Mbps
-  ["Excitel","200 Mbps",466,"12mo wifi-only","Unlimited","None",200],
-  ["JioFiber","100 Mbps",699,"Prepaid +GST","Unlimited","None",100],
-  ["BSNL","100 Mbps",599,"+GST","4000 GB/mo","None",100],
-  ["ACT","100 Mbps",599,"","Unlimited","None",100],
-  ["Airtel","100 Mbps",799,"+GST","Unlimited","Google One only",100],
-  ["Hathway","100 Mbps",749,"Quarterly plan","1000 GB","6 OTT",100],
-  ["Tata Play","100 Mbps",850,"Check availability","Unlimited","10+ OTT",100],
-  // 150-200 Mbps
-  ["JioFiber","150 Mbps",999,"Prepaid +GST","Unlimited","14+ OTT",150],
-  ["Excitel","200 Mbps",699,"12mo + OTT","Unlimited","22 OTT + Live TV",200],
-  ["ACT","200 Mbps",749,"","Unlimited","None",200],
-  ["BSNL","150 Mbps",799,"+GST","4000 GB/mo","None",150],
-  ["Airtel","100 Mbps",999,"+GST, Netflix bundle","Unlimited","Netflix + Amazon + Apple TV + 4 more",100],
-  ["Hathway","150 Mbps",899,"Quarterly plan","Unlimited","6 OTT + DTH",150],
-  // 300 Mbps
-  ["Excitel","300 Mbps",724,"12mo + OTT","Unlimited","22 OTT + Live TV",300],
-  ["ACT","300 Mbps",899,"","Unlimited","None",300],
-  ["JioFiber","300 Mbps",1499,"Prepaid +GST","Unlimited","Netflix + Amazon + 14 OTT",300],
-  ["Airtel","300 Mbps",1599,"+GST, TV + Netflix","Unlimited","TV + Netflix + Amazon + Apple TV + 5 more",300],
-  ["Tata Play","300 Mbps",1500,"Check availability","Unlimited","Premium OTT",300],
-  // 500 Mbps
-  ["ACT","500 Mbps",1199,"","Unlimited","Jio Hotstar + Yup TV",500],
-  ["Tata Play","500 Mbps",1900,"Check availability","Unlimited","Premium OTT",500],
-  // 1 Gbps
-  
-  ["ACT","1 Gbps",2499,"","Unlimited","Jio Hotstar + Yup TV",1000],
-  ["Tata Play","1 Gbps",3500,"Check availability","Unlimited","All Premium OTT",1000],
-  ["Airtel","1 Gbps",3999,"+GST, TV + Netflix Premium","Unlimited","TV + Netflix Premium + Amazon + Apple TV + Apollo 24|7 + 5 more",1000],
-];
+// ==================== COMPARISON (DERIVED FROM ISPS) ====================
+// Flatten every plan from every ISP into comparison rows. No hand-maintained
+// second copy of the pricing data, so the table can never drift from the cards.
+const CMP=ISPS.flatMap(isp=>isp.plans.map(p=>({
+  isp:isp.abbr,
+  s:p.s,
+  price:p.p,
+  note:p.cmpNote||"",
+  fup:p.fup,
+  ott:p.ott,
+  n:speedNum(p.s),
+})));
 function renderCmp(filter="all"){
   const b=document.getElementById("cmpBody");b.innerHTML="";
   let data=filter==="all"?[...CMP]:CMP.filter(r=>{
-    const n=r[6];
+    const n=r.n;
     if(filter==="50")return n<=50;
     if(filter==="100")return n>50&&n<=100;
     if(filter==="200")return n>100&&n<=200;
@@ -419,17 +407,17 @@ function renderCmp(filter="all"){
     return true;
   });
   const bySpeed={};
-  data.forEach(r=>{if(r[2]==="N/A")return;const k=r[6];if(!bySpeed[k]||r[2]<bySpeed[k])bySpeed[k]=r[2];});
-  data.sort((a,b)=>{if(a[2]==="N/A")return 1;if(b[2]==="N/A")return -1;return a[2]-b[2];});
+  data.forEach(r=>{const k=r.n;if(!(k in bySpeed)||r.price<bySpeed[k])bySpeed[k]=r.price;});
+  data.sort((a,b)=>a.price-b.price);
   data.forEach(r=>{
-    const cheap=r[2]!=="N/A"&&r[2]===bySpeed[r[6]];
+    const cheap=r.price===bySpeed[r.n];
     b.innerHTML+=`<tr>
-      <td style="font-weight:600">${r[0]}</td>
-      <td>${r[1]}</td>
-      <td class="${cheap?"cheapest":""}">${r[2]==="N/A"?"N/A":"INR "+r[2]}</td>
-      <td style="color:var(--muted);font-size:.75rem">${r[3]}</td>
-      <td>${r[4]}</td>
-      <td style="color:var(--orange);font-size:.78rem">${r[5]}</td>
+      <td style="font-weight:600">${r.isp}</td>
+      <td>${r.s}</td>
+      <td class="${cheap?"cheapest":""}">INR ${r.price.toLocaleString("en-IN")}</td>
+      <td style="color:var(--muted);font-size:.75rem">${r.note}</td>
+      <td>${r.fup}</td>
+      <td style="color:var(--orange);font-size:.78rem">${r.ott}</td>
     </tr>`;
   });
 }
@@ -442,20 +430,34 @@ document.getElementById("cmpTabs").onclick=e=>{
 renderCmp();
 
 // ==================== ROUTER FINDER ====================
+// cap = realistic single-device 5 GHz wireless throughput (Mbps) for this router.
+// Used to bound the speed estimate: you never get more than min(plan, cap).
 const ROUTERS=[
-  {n:"TP-Link Archer C6",w:"Wi-Fi 5 AC1200",spd:[30,50,100],sz:["small"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:2500,price:2000,note:"Budget pick for small flats. Solid for browsing and streaming."},
-  {n:"TP-Link Archer AX12",w:"Wi-Fi 6 AX1500",spd:[30,50,100],sz:["small","medium"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:4000,price:3200,note:"Entry-level Wi-Fi 6. Good future-proofing on a budget."},
-  {n:"TP-Link Archer AX23",w:"Wi-Fi 6 AX1800",spd:[50,100,200],sz:["small","medium"],wall:"medium",use:["basic","streaming","work"],dev:["few","mod"],budget:6000,price:4800,note:"Solid all-rounder. Good range and 5 GHz performance."},
-  {n:"TP-Link Archer AX53",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming"],dev:["mod","many"],budget:8000,price:5999,note:"Best value for money. 160 MHz channel gives excellent 5 GHz speeds."},
-  {n:"TP-Link Archer AX73",w:"Wi-Fi 6 AX5400",spd:[200,300,500,1000],sz:["medium","large","villa"],wall:"high",use:["streaming","gaming","work","power"],dev:["mod","many","lots"],budget:12000,price:8000,note:"Best for gigabit plans. 4x4 MIMO gets close to gigabit wirelessly."},
-  {n:"ASUS RT-AX58U",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["gaming","work"],dev:["mod","many"],budget:12000,price:8500,note:"Best firmware and management. AiMesh expandable."},
-  {n:"TP-Link Archer AX72 Pro",w:"Wi-Fi 6 AX5400 + 2.5G",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:15000,price:11000,note:"AX73 plus a 2.5G Ethernet port. Future-proof for multi-gig."},
-  {n:"ASUS RT-AX86U Pro",w:"Wi-Fi 6 AX5700",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:23000,note:"Premium gaming router. WPA3, AiMesh, adaptive QoS."},
-  {n:"TP-Link Archer BE230",w:"Wi-Fi 7 BE3600",spd:[200,300,500,1000],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming","power"],dev:["mod","many","lots"],budget:12000,price:9000,note:"Best future-proof pick. Wi-Fi 7 with dual 2.5G ports at a great price."},
-  {n:"TP-Link Archer BE550",w:"Wi-Fi 7 BE9300",spd:[500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:16000,note:"Top-tier Wi-Fi 7. All 2.5G ports. Maximum future-proofing."},
-  {n:"TP-Link Deco X55 (2-pack)",w:"Wi-Fi 6 Mesh AX5400",spd:[100,200,300,500],sz:["large","villa"],wall:"high",use:["streaming","work"],dev:["mod","many"],budget:15000,price:10000,note:"Mesh system for seamless WiFi across multiple floors. Best for concrete walls."},
-  {n:"TP-Link Deco BE63 (2-pack)",w:"Wi-Fi 7 Mesh BE10000",spd:[500,1000],sz:["villa"],wall:"high",use:["power","gaming"],dev:["many","lots"],budget:30000,price:22000,note:"Premium Wi-Fi 7 mesh. Full gigabit in large multi-story homes."},
+  {n:"TP-Link Archer C6",w:"Wi-Fi 5 AC1200",cap:400,spd:[30,50,100],sz:["small"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:2500,price:2000,note:"Budget pick for small flats. Solid for browsing and streaming."},
+  {n:"TP-Link Archer AX12",w:"Wi-Fi 6 AX1500",cap:500,spd:[30,50,100],sz:["small","medium"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:4000,price:3200,note:"Entry-level Wi-Fi 6. Good future-proofing on a budget."},
+  {n:"TP-Link Archer AX23",w:"Wi-Fi 6 AX1800",cap:650,spd:[50,100,200],sz:["small","medium"],wall:"medium",use:["basic","streaming","work"],dev:["few","mod"],budget:6000,price:4800,note:"Solid all-rounder. Good range and 5 GHz performance."},
+  {n:"TP-Link Archer AX53",w:"Wi-Fi 6 AX3000",cap:900,spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming"],dev:["mod","many"],budget:8000,price:5999,note:"Best value for money. 160 MHz channel gives excellent 5 GHz speeds."},
+  {n:"TP-Link Archer AX73",w:"Wi-Fi 6 AX5400",cap:1200,spd:[200,300,500,1000],sz:["medium","large","villa"],wall:"high",use:["streaming","gaming","work","power"],dev:["mod","many","lots"],budget:12000,price:8000,note:"Best for gigabit plans. 4x4 MIMO gets close to gigabit wirelessly."},
+  {n:"ASUS RT-AX58U",w:"Wi-Fi 6 AX3000",cap:900,spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["gaming","work"],dev:["mod","many"],budget:12000,price:8500,note:"Best firmware and management. AiMesh expandable."},
+  {n:"TP-Link Archer AX72 Pro",w:"Wi-Fi 6 AX5400 + 2.5G",cap:1250,spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:15000,price:11000,note:"AX73 plus a 2.5G Ethernet port. Future-proof for multi-gig."},
+  {n:"ASUS RT-AX86U Pro",w:"Wi-Fi 6 AX5700",cap:1300,spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:23000,note:"Premium gaming router. WPA3, AiMesh, adaptive QoS."},
+  {n:"TP-Link Archer BE230",w:"Wi-Fi 7 BE3600",cap:1500,spd:[200,300,500,1000],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming","power"],dev:["mod","many","lots"],budget:12000,price:9000,note:"Best future-proof pick. Wi-Fi 7 with dual 2.5G ports at a great price."},
+  {n:"TP-Link Archer BE550",w:"Wi-Fi 7 BE9300",cap:2500,spd:[500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:16000,note:"Top-tier Wi-Fi 7. All 2.5G ports. Maximum future-proofing."},
+  {n:"TP-Link Deco X55 (2-pack)",w:"Wi-Fi 6 Mesh AX5400",cap:1000,spd:[100,200,300,500],sz:["large","villa"],wall:"high",use:["streaming","work"],dev:["mod","many"],budget:15000,price:10000,note:"Mesh system for seamless WiFi across multiple floors. Best for concrete walls."},
+  {n:"TP-Link Deco BE63 (2-pack)",w:"Wi-Fi 7 Mesh BE10000",cap:2500,spd:[500,1000],sz:["villa"],wall:"high",use:["power","gaming"],dev:["many","lots"],budget:30000,price:22000,note:"Premium Wi-Fi 7 mesh. Full gigabit in large multi-story homes."},
 ];
+// Estimate real-world wireless speed as a range, bottlenecked by whichever is
+// lower: the plan or the router's wireless ceiling. This makes the estimate
+// actually depend on the chosen router instead of the plan alone.
+function wifiEstimate(planMbps, router){
+  const eff=Math.min(planMbps, router.cap);
+  const round10=v=>Math.round(v/10)*10;
+  return {
+    low:round10(eff*0.7),
+    high:round10(eff*0.95),
+    bottleneck: router.cap < planMbps,
+  };
+}
 function findRouter(){
   const spd=+document.getElementById("fSpeed").value;
   const sz=document.getElementById("fSize").value;
@@ -474,8 +476,7 @@ function findRouter(){
     return{...r,score:s};
   });
   scored.sort((a,b)=>b.score-a.score);
-  const top=scored.slice(0,3);
-  const estSpeed=spd>=500?"700 to 950 Mbps":spd>=200?"500 to 750 Mbps":spd>=100?"350 to 550 Mbps":"150 to 300 Mbps";
+  const top=scored.slice(0,3).map(r=>({...r,est:wifiEstimate(spd,r)}));
   document.getElementById("routerOut").innerHTML=`
     <h3 style="margin-top:1.25rem;margin-bottom:.5rem">Top picks for your setup</h3>
     ${top.map((r,i)=>`
@@ -486,8 +487,8 @@ function findRouter(){
             <div class="rec-meta">${r.w} &middot; INR ${r.price.toLocaleString("en-IN")}${wall==="concrete"&&r.wall==="high"?" &middot; Good through concrete":""}</div>
           </div>
           <div style="text-align:right">
-            <div class="rec-speed">~${estSpeed}</div>
-            <div style="font-size:.72rem;color:var(--muted)">wireless estimate</div>
+            <div class="rec-speed">~${r.est.low} to ${r.est.high} Mbps</div>
+            <div style="font-size:.72rem;color:var(--muted)">${r.est.bottleneck?"router caps your plan":"wireless estimate"}</div>
           </div>
         </div>
         <p class="rec-why">${r.note}</p>

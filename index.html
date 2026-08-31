@@ -4,122 +4,183 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HyderabadNet - Internet Guide for Hyderabad</title>
+<script>
+  // Apply saved/preferred color theme before paint to avoid a flash.
+  (function(){try{
+    var k="hydnet-theme",s=localStorage.getItem(k);
+    var d=s?s:((window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
+    document.documentElement.setAttribute("data-theme",d);
+  }catch(e){document.documentElement.setAttribute("data-theme","light");}})();
+</script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#fafafa;--surface:#fff;--border:#e5e7eb;--text:#1a1a2e;--muted:#6b7280;
+    color-scheme:light;
+    --surface:#ffffff;--surface-2:#f6f8fc;--surface-3:#eceff6;
+    --border:#e4e9f2;--border-strong:#cbd5e1;
+    --text:#0f172a;--muted:#64748b;--text-soft:#334155;
     --blue:#2563eb;--green:#059669;--orange:#d97706;--red:#dc2626;--purple:#7c3aed;
-    --radius:8px;--shadow:0 1px 3px rgba(0,0,0,.06);
+    --tint-blue:#eff6ff;--tint-blue-border:#bfdbfe;
+    --tint-green:#eefdf4;--tint-green-border:#bbf7d0;
+    --tint-red:#fef2f2;--tint-amber:#fffbeb;--tint-violet:#f5f3ff;
+    --grad:linear-gradient(135deg,#4f46e5 0%,#2563eb 52%,#0ea5e9 100%);
+    --hero-bg:linear-gradient(160deg,#eef3ff 0%,#e6eefc 45%,#d9e7fd 100%);
+    --page:#f5f7fc;
+    --radius:12px;
+    --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+    --shadow:0 6px 20px -10px rgba(37,99,235,.25),0 2px 6px -4px rgba(15,23,42,.08);
+    --shadow-lg:0 18px 40px -18px rgba(37,99,235,.4);
+    --ring:rgba(37,99,235,.28);
   }
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+  [data-theme="dark"]{
+    color-scheme:dark;
+    --surface:#111a2e;--surface-2:#0e1626;--surface-3:#1b2740;
+    --border:#233149;--border-strong:#3a4a66;
+    --text:#e6edf7;--muted:#93a3ba;--text-soft:#c7d2e0;
+    --blue:#60a5fa;--green:#34d399;--orange:#fbbf24;--red:#f87171;--purple:#a78bfa;
+    --tint-blue:rgba(37,99,235,.16);--tint-blue-border:rgba(96,165,250,.35);
+    --tint-green:rgba(16,185,129,.14);--tint-green-border:rgba(52,211,153,.35);
+    --tint-red:rgba(248,113,113,.15);--tint-amber:rgba(251,191,36,.15);--tint-violet:rgba(167,139,250,.18);
+    --hero-bg:linear-gradient(160deg,#101a30 0%,#0c1424 55%,#0a101e 100%);
+    --page:#0a1120;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow:0 8px 24px -12px rgba(0,0,0,.6),0 2px 8px -4px rgba(0,0,0,.5);
+    --shadow-lg:0 20px 44px -18px rgba(0,0,0,.7);
+    --ring:rgba(96,165,250,.4);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100vh;background-attachment:fixed;
+    background:
+      radial-gradient(1100px 560px at 12% -12%,rgba(79,70,229,.12),transparent 60%),
+      radial-gradient(1000px 520px at 108% -6%,rgba(14,165,233,.12),transparent 55%),
+      radial-gradient(900px 720px at 50% 122%,rgba(37,99,235,.07),transparent 60%),
+      var(--page)}
   a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-  nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100}
-  nav .inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:2rem;height:50px}
-  nav .brand{font-weight:700;font-size:.95rem;white-space:nowrap}
-  nav .brand span{color:var(--blue)}
-  nav ul{list-style:none;display:flex;gap:1.25rem;overflow-x:auto}
-  nav a{color:var(--muted);font-size:.82rem;font-weight:500;white-space:nowrap}
-  nav a:hover{color:var(--text);text-decoration:none}
-  nav .credit{margin-left:auto;font-size:.72rem;color:var(--muted);white-space:nowrap}
+  nav{background:color-mix(in srgb,var(--surface) 72%,transparent);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px)}
+  nav .inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;height:56px}
+  nav .brand{font-weight:800;font-size:1rem;letter-spacing:-.01em;white-space:nowrap}
+  nav .brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav ul{list-style:none;display:flex;gap:.3rem;overflow-x:auto}
+  nav a{color:var(--muted);font-size:.82rem;font-weight:600;white-space:nowrap;padding:.35rem .6rem;border-radius:999px;transition:color .15s,background .15s}
+  nav a:hover{color:var(--blue);background:var(--tint-blue);text-decoration:none}
+  .theme-toggle{margin-left:auto;flex-shrink:0;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;cursor:pointer;transition:background .15s,transform .15s}
+  .theme-toggle:hover{background:var(--surface-3);transform:translateY(-1px)}
+  .theme-toggle:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  nav .credit{margin-left:.85rem;font-size:.72rem;color:var(--muted);white-space:nowrap}
   .wrap{max-width:1000px;margin:0 auto;padding:0 1.5rem}
-  h2{font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
-  .section{margin-bottom:2.5rem;padding-top:1.5rem}
-  .hero{padding:3rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:.5rem}
-  .hero h1{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.3;margin-bottom:.75rem}
-  .hero h1 .hl{color:var(--blue)}
-  .hero .tagline{font-size:1.05rem;color:var(--muted);max-width:600px;line-height:1.7}
-  .hero .steps{display:flex;gap:1.5rem;margin-top:1.25rem;flex-wrap:wrap}
-  .hero .step{display:flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:500}
-  .hero .step .num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
-  .tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
-  .tab{padding:.35rem .8rem;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.78rem;cursor:pointer;font-weight:500;transition:all .15s}
-  .tab:hover{border-color:var(--blue);color:var(--text)}
-  .tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
-  .isp-list{display:flex;flex-direction:column;gap:.5rem}
-  .isp-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
-  .isp-row:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .isp-summary{display:grid;grid-template-columns:40px 1fr auto auto auto;gap:.75rem;align-items:center;padding:.75rem 1rem;cursor:pointer;user-select:none}
-  .isp-summary:hover{background:#f9fafb}
-  .isp-dot{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem}
+  h2{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem}
+  .section{margin-bottom:2.75rem;padding-top:1.75rem;scroll-margin-top:68px}
+  .wrap>.section>h2::before{content:"";display:block;width:40px;height:3px;border-radius:2px;background:var(--grad);margin-bottom:.6rem}
+  /* Hero panel with adapted ThreeUI "Connectivity Graph" canvas background */
+  .hero{position:relative;overflow:hidden;padding:3.25rem 2rem 2.75rem;margin:1.5rem 0 1.75rem;border:1px solid var(--border);border-radius:20px;background:var(--hero-bg);box-shadow:var(--shadow)}
+  .hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .hero>h1,.hero>.tagline,.hero>.steps{position:relative;z-index:1}
+  .hero h1{font-size:clamp(1.7rem,4.6vw,2.7rem);font-weight:800;line-height:1.22;letter-spacing:-.025em;margin-bottom:.85rem}
+  .hero h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .tagline{font-size:1.05rem;color:var(--muted);max-width:620px;line-height:1.7}
+  .hero .steps{display:flex;gap:1.25rem;margin-top:1.5rem;flex-wrap:wrap}
+  .hero-toggle{position:absolute;top:.9rem;right:.9rem;z-index:2;display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;font-size:.72rem;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--surface) 70%,transparent);border:1px solid var(--border);border-radius:999px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .15s}
+  .hero-toggle:hover{background:var(--surface)}
+  .hero-toggle:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  .hero .step{display:flex;align-items:center;gap:.55rem;font-size:.88rem;font-weight:600}
+  .hero .step .num{width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;box-shadow:0 4px 10px -4px rgba(37,99,235,.5)}
+  .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+  .tab{padding:.4rem .85rem;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.78rem;cursor:pointer;font-weight:600;transition:all .15s}
+  .tab:hover{border-color:var(--blue);color:var(--blue);background:var(--tint-blue)}
+  .tab.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 6px 14px -6px rgba(37,99,235,.5)}
+  .tab.on:hover{color:#fff}
+  .isp-list{display:flex;flex-direction:column;gap:.6rem}
+  .isp-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;transition:box-shadow .2s,transform .2s,border-color .2s}
+  .isp-row:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--border-strong)}
+  .isp-summary{display:grid;grid-template-columns:40px 1fr auto auto auto;gap:.75rem;align-items:center;padding:.8rem 1rem;cursor:pointer;user-select:none}
+  .isp-summary:hover{background:var(--surface-2)}
+  .isp-dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.95rem;box-shadow:0 4px 10px -5px rgba(15,23,42,.4)}
   .isp-info .isp-nm{font-weight:700;font-size:.92rem}
   .isp-info .isp-desc{font-size:.76rem;color:var(--muted);line-height:1.4}
   .isp-best{text-align:right}
-  .isp-best .price{font-weight:700;color:var(--green);font-size:.95rem}
+  .isp-best .price{font-weight:800;color:var(--green);font-size:.95rem}
   .isp-best .lbl{font-size:.68rem;color:var(--muted)}
   .isp-rating{font-size:.78rem;color:var(--muted);white-space:nowrap}
   .isp-arrow{font-size:.7rem;color:var(--muted);transition:transform .2s}
   .isp-row.open .isp-arrow{transform:rotate(90deg)}
-  .isp-details{display:none;border-top:1px solid var(--border);padding:.75rem 1rem;background:#fafbfc}
+  .isp-details{display:none;border-top:1px solid var(--border);padding:.85rem 1rem;background:var(--surface-2)}
   .isp-row.open .isp-details{display:block}
-  .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.5rem}
-  .plan-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem .75rem;transition:border-color .15s;position:relative}
-  .plan-chip:hover{border-color:var(--blue)}
+  .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.55rem}
+  .plan-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.65rem .8rem;transition:border-color .15s,transform .15s,box-shadow .15s;position:relative}
+  .plan-chip:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
   .plan-chip .pc-speed{font-weight:700;font-size:.88rem}
-  .plan-chip .pc-price{color:var(--green);font-weight:600;font-size:.85rem;margin-top:.15rem}
+  .plan-chip .pc-price{color:var(--green);font-weight:700;font-size:.85rem;margin-top:.15rem}
   .plan-chip .pc-ott{color:var(--orange);font-size:.72rem;margin-top:.2rem}
   .plan-chip .pc-fup{color:var(--muted);font-size:.7rem}
-  .plan-chip.best{border-color:var(--green);background:#f0fdf4}
-  .plan-chip.best::after{content:"BEST";position:absolute;top:.3rem;right:.4rem;font-size:.55rem;background:var(--green);color:#fff;padding:.1rem .3rem;border-radius:3px;font-weight:700}
-  .isp-note{font-size:.75rem;color:var(--muted);margin-top:.6rem;padding:.5rem .75rem;background:#f9fafb;border-radius:4px;border-left:3px solid var(--orange)}
-  .isp-actions{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;align-items:center}
-  .visit-link{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .75rem;border-radius:5px;background:var(--blue);color:#fff;font-size:.78rem;font-weight:600;text-decoration:none;transition:opacity .15s}
-  .visit-link:hover{opacity:.85;text-decoration:none}
-  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+  .plan-chip.best{border-color:var(--tint-green-border);background:var(--tint-green)}
+  .plan-chip.best::after{content:"BEST";position:absolute;top:.3rem;right:.4rem;font-size:.55rem;background:var(--green);color:#fff;padding:.1rem .35rem;border-radius:4px;font-weight:700;letter-spacing:.03em}
+  .isp-note{font-size:.75rem;color:var(--muted);margin-top:.7rem;padding:.55rem .8rem;background:var(--surface-3);border-radius:8px;border-left:3px solid var(--orange)}
+  .isp-actions{display:flex;gap:.6rem;margin-top:.8rem;flex-wrap:wrap;align-items:center}
+  .visit-link{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .85rem;border-radius:8px;background:var(--grad);color:#fff;font-size:.78rem;font-weight:600;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 14px -8px rgba(37,99,235,.6)}
+  .visit-link:hover{transform:translateY(-1px);box-shadow:var(--shadow);text-decoration:none}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow-sm)}
   table.cmp{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap}
-  table.cmp th{text-align:left;padding:.55rem .7rem;background:#f9fafb;border-bottom:2px solid var(--border);font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:50px;z-index:5}
-  table.cmp td{padding:.5rem .7rem;border-bottom:1px solid #f3f4f6}
-  table.cmp tr:hover td{background:#f9fafb}
-  .cheapest{color:var(--green);font-weight:700}
-  .finder{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow)}
-  .finder-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:1rem}
-  .field label{display:block;font-size:.78rem;font-weight:600;margin-bottom:.25rem}
-  .field select{width:100%;padding:.5rem .65rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--surface);color:var(--text);appearance:auto}
-  .field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
-  .find-btn{width:100%;padding:.65rem;border:none;border-radius:6px;background:var(--blue);color:#fff;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s}
-  .find-btn:hover{background:#1d4ed8}
-  .find-btn:active{transform:scale(.98)}
+  table.cmp th{text-align:left;padding:.65rem .8rem;background:var(--surface-2);border-bottom:1px solid var(--border);font-weight:700;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:56px;z-index:5}
+  table.cmp td{padding:.6rem .8rem;border-bottom:1px solid var(--border)}
+  table.cmp tbody tr{transition:background .12s}
+  table.cmp tr:hover td{background:var(--surface-2)}
+  .cheapest{color:var(--green);font-weight:800}
+  .finder{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.35rem;box-shadow:var(--shadow-sm)}
+  .finder-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.1rem}
+  .field label{display:block;font-size:.78rem;font-weight:600;margin-bottom:.3rem}
+  .field select{width:100%;padding:.55rem .7rem;border:1px solid var(--border);border-radius:9px;font-size:.85rem;background:var(--surface);color:var(--text);appearance:auto;transition:border-color .15s,box-shadow .15s}
+  .field select:hover{border-color:var(--border-strong)}
+  .field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--ring)}
+  .find-btn{width:100%;padding:.75rem;border:none;border-radius:10px;background:var(--grad);color:#fff;font-size:.92rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 10px 22px -10px rgba(37,99,235,.6)}
+  .find-btn:hover{transform:translateY(-1px);box-shadow:0 14px 28px -10px rgba(37,99,235,.65)}
+  .find-btn:active{transform:scale(.99)}
   #routerOut{margin-top:1rem}
-  .rec{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:.6rem;transition:transform .15s}
-  .rec:hover{transform:translateY(-1px)}
+  .rec{background:var(--tint-green);border:1px solid var(--tint-green-border);border-radius:var(--radius);padding:.9rem 1.05rem;margin-bottom:.65rem;transition:transform .15s,box-shadow .15s}
+  .rec:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
   .rec .rec-top{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:.4rem}
   .rec h4{font-size:.9rem;margin-bottom:.15rem}
   .rec .rec-meta{font-size:.78rem;color:var(--muted)}
-  .rec .rec-speed{font-weight:700;color:var(--green);font-size:.92rem}
-  .rec .rec-why{font-size:.82rem;color:#374151;margin-top:.3rem}
-  .tip-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);padding:.85rem 1rem;margin-top:.75rem}
+  .rec .rec-speed{font-weight:800;color:var(--green);font-size:.92rem}
+  .rec .rec-why{font-size:.82rem;color:var(--text-soft);margin-top:.3rem}
+  .tip-box{background:var(--tint-blue);border:1px solid var(--tint-blue-border);border-radius:var(--radius);padding:.9rem 1.05rem;margin-top:.8rem}
   .tip-box h4{font-size:.85rem;color:var(--blue);margin-bottom:.35rem}
-  .tip-box ul{padding-left:1rem;font-size:.82rem;color:#374151}
+  .tip-box ul{padding-left:1.1rem;font-size:.82rem;color:var(--text-soft)}
   .tip-box li{margin-bottom:.2rem}
-  .sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
-  .sec-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}
-  .sec-item:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.06)}
-  .sev{display:inline-block;font-size:.65rem;font-weight:700;padding:.12rem .4rem;border-radius:999px;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.03em}
-  .sev-crit{background:#fef2f2;color:var(--red)}
-  .sev-high{background:#fffbeb;color:var(--orange)}
-  .sev-med{background:#f5f3ff;color:var(--purple)}
-  .sev-ok{background:#f0fdf4;color:var(--green)}
+  .sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.8rem}
+  .sec-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.95rem 1.1rem;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s,border-color .15s}
+  .sec-item:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--border-strong)}
+  .sev{display:inline-block;font-size:.65rem;font-weight:700;padding:.14rem .5rem;border-radius:999px;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.04em}
+  .sev-crit{background:var(--tint-red);color:var(--red)}
+  .sev-high{background:var(--tint-amber);color:var(--orange)}
+  .sev-med{background:var(--tint-violet);color:var(--purple)}
+  .sev-ok{background:var(--tint-green);color:var(--green)}
   .sec-item h3{font-size:.88rem;margin-bottom:.2rem}
   .sec-item p{font-size:.78rem;color:var(--muted);line-height:1.5}
-  .gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.6rem}
-  .gloss{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem .85rem;transition:transform .15s}
-  .gloss:hover{transform:translateY(-1px)}
+  .gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.65rem}
+  .gloss{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem .95rem;transition:transform .15s,box-shadow .15s,border-color .15s}
+  .gloss:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--border-strong)}
   .gloss dt{font-weight:700;font-size:.82rem;color:var(--blue);margin-bottom:.1rem}
   .gloss dd{font-size:.78rem;color:var(--muted);line-height:1.45}
-  footer{text-align:center;padding:2rem 1.5rem;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:2rem}
-  footer .sig{margin-top:.3rem;font-weight:600;color:var(--text)}
+  footer{text-align:center;padding:2.5rem 1.5rem;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:2.5rem}
+  footer .sig{margin-top:.3rem;font-weight:700;color:var(--text)}
   @media(max-width:640px){
+    .hero{padding:2.25rem 1.25rem 2rem;border-radius:16px}
     .finder-grid{grid-template-columns:1fr}
     .isp-summary{grid-template-columns:36px 1fr auto;gap:.5rem}
     .isp-rating,.isp-arrow{display:none}
     .isp-best .lbl{display:none}
     .plan-grid{grid-template-columns:1fr 1fr}
-    nav ul{gap:.6rem}
+    nav ul{gap:.25rem}
     nav .credit{display:none}
     table.cmp{font-size:.72rem}
     table.cmp th,table.cmp td{padding:.4rem .5rem}
   }
   .fade-in{animation:fadeUp .25s ease}
   @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  }
 </style>
 </head>
 <body>
@@ -133,11 +194,14 @@
       <li><a href="#security">Security</a></li>
       <li><a href="#glossary">Glossary</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">☾</button>
     <span class="credit">made with love by asmgkr</span>
   </div>
 </nav>
 <div class="wrap">
-  <div class="hero section" style="padding-top:0">
+  <div class="hero section">
+    <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+    <button class="hero-toggle" id="heroToggle" type="button" aria-label="Pause background animation">Pause</button>
     <h1>Internet in Hyderabad,<br><span class="hl">actually explained.</span></h1>
     <p class="tagline">You pay for internet every month. But do you know if you're overpaying? Or if your router is the reason your Netflix buffers? This guide fixes that.</p>
     <div class="steps">
@@ -163,7 +227,7 @@
   <!-- ============ COMPARE ============ -->
   <div class="section" id="compare">
     <h2>Compare Plans Side by Side</h2>
-    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Best value plan per speed tier from each ISP. Green means cheapest at that speed. Excitel prices are 12-month commitment rates.</p>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Every plan from every provider, grouped by speed tier. Green means cheapest at that exact speed. Excitel prices are 12-month commitment rates.</p>
     <div class="tabs" id="cmpTabs">
       <button class="tab on" data-s="all">All Speeds</button>
       <button class="tab" data-s="50">Under 50</button>
@@ -244,81 +308,95 @@
   <div class="sig">made with love by asmgkr</div>
 </footer>
 <script>
-// ==================== ISP DATA (VERIFIED FROM ISP WEBSITES) ====================
+// ==================== ISP DATA (SINGLE SOURCE OF TRUTH) ====================
+// Every plan lives here once. The ISP cards AND the comparison table are both
+// derived from this array, so a price can never disagree between the two views.
+// Per-plan fields: s=speed label, p=monthly INR, q=quarterly INR, fup, ott,
+// best=highlight in ISP card, cmpNote=short note shown in the comparison table.
 const ISPS=[
-  {name:"ACT Fibernet",color:"#16a34a",rating:"4.3",tags:["major","premium"],
+  {name:"ACT Fibernet",abbr:"ACT",color:"#16a34a",rating:"4.3",tags:["major","premium"],
    usp:"Widest fiber coverage in Hyderabad. Consistent speeds. Smart Mesh routers available on select plans.",
    url:"https://www.actcorp.in/broadband/hyderabad/broadband-plans",
    note:"Prices as listed on actcorp.in for Hyderabad. GST extra.",
    plans:[
-     {s:"100 Mbps",p:599,q:549,fup:"Unlimited",ott:"None"},
-     {s:"200 Mbps",p:749,q:699,fup:"Unlimited",ott:"None"},
-     {s:"300 Mbps",p:899,q:849,fup:"Unlimited",ott:"None",best:true},
-     {s:"500 Mbps",p:1199,q:1099,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",best:true},
-     {s:"1 Gbps",p:2499,q:2299,fup:"Unlimited",ott:"Jio Hotstar, Yup TV"},
+     {s:"100 Mbps",p:599,q:549,fup:"Unlimited",ott:"None",cmpNote:""},
+     {s:"200 Mbps",p:749,q:699,fup:"Unlimited",ott:"None",cmpNote:""},
+     {s:"300 Mbps",p:899,q:849,fup:"Unlimited",ott:"None",best:true,cmpNote:""},
+     {s:"500 Mbps",p:1199,q:1099,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",best:true,cmpNote:""},
+     {s:"1 Gbps",p:2499,q:2299,fup:"Unlimited",ott:"Jio Hotstar, Yup TV",cmpNote:""},
    ]},
-  {name:"Airtel Xstream Fiber",color:"#e11d48",rating:"4.4",tags:["major","premium"],
+  {name:"Airtel Xstream Fiber",abbr:"Airtel",color:"#e11d48",rating:"4.4",tags:["major","premium"],
    usp:"Best OTT bundle with 20+ streaming apps. Free router and installation. Airtel Black combo deals for mobile + broadband.",
    url:"https://www.airtel.in/plans/broadband/hyderabad/",
    note:"Prices verified from airtel.in/plans/broadband/hyderabad. GST extra. Plans with TV channels include INR 350 worth of DTH channels.",
    plans:[
-     {s:"40 Mbps",p:499,q:449,fup:"Unlimited",ott:"Google One only"},
-     {s:"40 Mbps + TV",p:699,q:649,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
-     {s:"100 Mbps",p:799,q:749,fup:"Unlimited",ott:"Google One only"},
-     {s:"100 Mbps + TV",p:899,q:849,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream"},
-     {s:"100 Mbps + Netflix",p:999,q:933,fup:"Unlimited",ott:"Netflix + Amazon Prime + Apple TV + JioHotstar + 3 more",best:true},
-     {s:"300 Mbps + TV + Netflix",p:1599,q:1499,fup:"Unlimited",ott:"TV + Netflix + Amazon Prime + Apple TV + JioHotstar + 4 more",best:true},
-     {s:"1 Gbps + TV + Netflix Premium",p:3999,q:3699,fup:"Unlimited",ott:"TV + Netflix Premium + Amazon Prime + Apple TV + Apollo 24|7 + 5 more"},
+     {s:"40 Mbps",p:499,q:449,fup:"Unlimited",ott:"Google One only",cmpNote:"+GST"},
+     {s:"40 Mbps + TV",p:699,q:649,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream",cmpNote:"+GST, TV bundle"},
+     {s:"100 Mbps",p:799,q:749,fup:"Unlimited",ott:"Google One only",cmpNote:"+GST"},
+     {s:"100 Mbps + TV",p:899,q:849,fup:"Unlimited",ott:"TV + JioHotstar + ZEE5 + Xstream",cmpNote:"+GST, TV bundle"},
+     {s:"100 Mbps + Netflix",p:999,q:933,fup:"Unlimited",ott:"Netflix + Amazon Prime + Apple TV + JioHotstar + 3 more",best:true,cmpNote:"+GST, Netflix bundle"},
+     {s:"300 Mbps + TV + Netflix",p:1599,q:1499,fup:"Unlimited",ott:"TV + Netflix + Amazon Prime + Apple TV + JioHotstar + 4 more",best:true,cmpNote:"+GST, TV + Netflix"},
+     {s:"1 Gbps + TV + Netflix Premium",p:3999,q:3699,fup:"Unlimited",ott:"TV + Netflix Premium + Amazon Prime + Apple TV + Apollo 24|7 + 5 more",cmpNote:"+GST, TV + Netflix Premium"},
    ]},
-  {name:"JioFiber",color:"#2563eb",rating:"4.2",tags:["major","budget"],
+  {name:"JioFiber",abbr:"JioFiber",color:"#2563eb",rating:"4.2",tags:["major","budget"],
    usp:"Cheapest entry price at INR 399. Free 4K Set-top Box with postpaid plans. Voice calls included on all plans.",
    url:"https://www.jio.com/fiber/en-in/broadband-plans/hyderabad/",
    note:"Prices from jio.com for Hyderabad prepaid plans. GST extra. Free 4K Set-top Box on postpaid. INR 1,000 installation charge for prepaid.",
    plans:[
-     {s:"30 Mbps",p:399,q:366,fup:"Unlimited",ott:"None"},
-     {s:"100 Mbps",p:699,q:649,fup:"Unlimited",ott:"None",best:true},
-     {s:"150 Mbps",p:999,q:933,fup:"Unlimited",ott:"14+ OTT (Amazon Prime, Disney+ Hotstar, etc.)",best:true},
-     {s:"300 Mbps",p:1499,q:1399,fup:"Unlimited",ott:"14+ OTT (Netflix, Amazon Prime, Disney+ Hotstar, etc.)"},
+     {s:"30 Mbps",p:399,q:366,fup:"Unlimited",ott:"None",cmpNote:"Prepaid +GST"},
+     {s:"100 Mbps",p:699,q:649,fup:"Unlimited",ott:"None",best:true,cmpNote:"Prepaid +GST"},
+     {s:"150 Mbps",p:999,q:933,fup:"Unlimited",ott:"14+ OTT (Amazon Prime, Disney+ Hotstar, etc.)",best:true,cmpNote:"Prepaid +GST"},
+     {s:"300 Mbps",p:1499,q:1399,fup:"Unlimited",ott:"14+ OTT (Netflix, Amazon Prime, Disney+ Hotstar, etc.)",cmpNote:"Prepaid +GST"},
    ]},
-  {name:"Excitel Broadband",color:"#7c3aed",rating:"4.1",tags:["budget","major"],
+  {name:"Excitel Broadband",abbr:"Excitel",color:"#7c3aed",rating:"4.1",tags:["budget","major"],
    usp:"No FUP on all plans. Cheapest high-speed option. Cable Cutter plans include 22 OTT apps and 250+ live TV channels.",
    url:"https://www.excitel.com/broadband-plans/hyderabad/",
    note:"All prices below are 12-month commitment rates (cheapest option). 3-month prices are higher. Cable Cutter plans include OTT + Live TV. WiFi-only plans are cheaper but no OTT.",
    plans:[
-     {s:"200 Mbps WiFi only",p:466,q:466,fup:"Unlimited",ott:"None"},
-     {s:"300 Mbps WiFi only",p:516,q:516,fup:"Unlimited",ott:"None"},
-     {s:"200 Mbps + OTT",p:699,q:699,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
-     {s:"300 Mbps + OTT",p:724,q:724,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true},
+     {s:"200 Mbps WiFi only",p:466,q:466,fup:"Unlimited",ott:"None",cmpNote:"12mo wifi-only"},
+     {s:"300 Mbps WiFi only",p:516,q:516,fup:"Unlimited",ott:"None",cmpNote:"12mo wifi-only"},
+     {s:"200 Mbps + OTT",p:699,q:699,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true,cmpNote:"12mo + OTT"},
+     {s:"300 Mbps + OTT",p:724,q:724,fup:"Unlimited",ott:"22 OTT + 250+ Live TV",best:true,cmpNote:"12mo + OTT"},
    ]},
-  {name:"BSNL Bharat Fiber",color:"#ca8a04",rating:"3.8",tags:["budget"],
+  {name:"BSNL Bharat Fiber",abbr:"BSNL",color:"#ca8a04",rating:"3.8",tags:["budget"],
    usp:"Government-backed. Free installation on most plans. Unlimited local and STD calls included.",
    url:"https://www.bsnl.co.in/broadband/bharatfiber",
    note:"Prices from plansinfo.com/bsnl-ftth. All plans have FUP limits (not truly unlimited). After FUP, speed drops to 2-10 Mbps. No 200+ Mbps or 1 Gbps plans currently available.",
    plans:[
-     {s:"40 Mbps",p:399,q:366,fup:"1400 GB/mo",ott:"None"},
-     {s:"100 Mbps",p:599,q:549,fup:"4000 GB/mo",ott:"None",best:true},
-     {s:"150 Mbps",p:799,q:733,fup:"4000 GB/mo",ott:"None"},
+     {s:"40 Mbps",p:399,q:366,fup:"1400 GB/mo",ott:"None",cmpNote:"+GST"},
+     {s:"100 Mbps",p:599,q:549,fup:"4000 GB/mo",ott:"None",best:true,cmpNote:"+GST"},
+     {s:"150 Mbps",p:799,q:733,fup:"4000 GB/mo",ott:"None",cmpNote:"+GST"},
    ]},
-  {name:"Tata Play Fiber",color:"#0891b2",rating:"4.0",tags:["premium"],
+  {name:"Tata Play Fiber",abbr:"Tata Play",color:"#0891b2",rating:"4.0",tags:["premium"],
    usp:"Premium OTT bundles. DTH + Fiber combo deals. Free WiFi 6 ONT on some plans.",
    url:"https://www.tataplayfiber.com/",
    note:"Limited availability in Hyderabad. Plans and pricing vary by city. Check tataplayfiber.com for Hyderabad-specific plans.",
    plans:[
-     {s:"50 Mbps",p:749,q:699,fup:"Unlimited",ott:"Basic OTT"},
-     {s:"100 Mbps",p:850,q:799,fup:"Unlimited",ott:"10+ OTT Apps"},
-     {s:"300 Mbps",p:1500,q:1399,fup:"Unlimited",ott:"Premium OTT Bundle",best:true},
-     {s:"1 Gbps",p:3500,q:3266,fup:"Unlimited",ott:"All Premium OTT"},
+     {s:"50 Mbps",p:749,q:699,fup:"Unlimited",ott:"Basic OTT",cmpNote:"Check availability"},
+     {s:"100 Mbps",p:850,q:799,fup:"Unlimited",ott:"10+ OTT Apps",cmpNote:"Check availability"},
+     {s:"300 Mbps",p:1500,q:1399,fup:"Unlimited",ott:"Premium OTT Bundle",best:true,cmpNote:"Check availability"},
+     {s:"500 Mbps",p:1900,q:1799,fup:"Unlimited",ott:"Premium OTT Bundle",cmpNote:"Check availability"},
+     {s:"1 Gbps",p:3500,q:3266,fup:"Unlimited",ott:"All Premium OTT",cmpNote:"Check availability"},
    ]},
-  {name:"Hathway",color:"#ea580c",rating:"3.9",tags:["budget"],
+  {name:"Hathway",abbr:"Hathway",color:"#ea580c",rating:"3.9",tags:["budget"],
    usp:"Cable TV + Internet bundles. Dish TV combo available. Affordable entry plans.",
    url:"https://www.hathway.com/Broadband/HomeBroadband/Hyderabad",
    note:"Coverage in Hyderabad may be limited. Plans with Dish TV combo available in some areas. Check hathway.com for availability.",
    plans:[
-     {s:"40 Mbps",p:524,q:499,fup:"500 GB",ott:"6 OTT Apps"},
-     {s:"100 Mbps",p:749,q:699,fup:"1000 GB",ott:"6 OTT Apps"},
-     {s:"150 Mbps",p:899,q:849,fup:"Unlimited",ott:"6 OTT + DTH"},
+     {s:"40 Mbps",p:524,q:499,fup:"500 GB",ott:"6 OTT Apps",cmpNote:"Quarterly plan"},
+     {s:"100 Mbps",p:749,q:699,fup:"1000 GB",ott:"6 OTT Apps",cmpNote:"Quarterly plan"},
+     {s:"150 Mbps",p:899,q:849,fup:"Unlimited",ott:"6 OTT + DTH",cmpNote:"Quarterly plan"},
    ]},
 ];
+
+// Parse a numeric Mbps value out of a speed label ("1 Gbps" -> 1000, "200 Mbps WiFi only" -> 200).
+function speedNum(label){
+  const m=String(label).match(/([\d.]+)\s*(Gbps|Mbps)/i);
+  if(!m)return 0;
+  let v=parseFloat(m[1]);
+  if(/gbps/i.test(m[2]))v*=1000;
+  return v;
+}
 
 // ==================== RENDER ISPs ====================
 function renderISPs(filter="all"){
@@ -368,48 +446,22 @@ document.getElementById("ispTabs").onclick=e=>{
 };
 renderISPs();
 
-// ==================== COMPARISON (VERIFIED) ====================
-const CMP=[
-  // [ISP, speed, monthly, notes, FUP, OTT, speedNum]
-  // Under 50 Mbps
-  ["JioFiber","30 Mbps",399,"Prepaid +GST","Unlimited","None",30],
-  ["BSNL","40 Mbps",399,"+GST","1400 GB/mo","None",40],
-  ["Airtel","40 Mbps",499,"+GST","Unlimited","Google One only",40],
-  ["Hathway","40 Mbps",524,"Quarterly plan","500 GB","6 OTT",40],
-  // 100 Mbps
-  ["Excitel","200 Mbps",466,"12mo wifi-only","Unlimited","None",200],
-  ["JioFiber","100 Mbps",699,"Prepaid +GST","Unlimited","None",100],
-  ["BSNL","100 Mbps",599,"+GST","4000 GB/mo","None",100],
-  ["ACT","100 Mbps",599,"","Unlimited","None",100],
-  ["Airtel","100 Mbps",799,"+GST","Unlimited","Google One only",100],
-  ["Hathway","100 Mbps",749,"Quarterly plan","1000 GB","6 OTT",100],
-  ["Tata Play","100 Mbps",850,"Check availability","Unlimited","10+ OTT",100],
-  // 150-200 Mbps
-  ["JioFiber","150 Mbps",999,"Prepaid +GST","Unlimited","14+ OTT",150],
-  ["Excitel","200 Mbps",699,"12mo + OTT","Unlimited","22 OTT + Live TV",200],
-  ["ACT","200 Mbps",749,"","Unlimited","None",200],
-  ["BSNL","150 Mbps",799,"+GST","4000 GB/mo","None",150],
-  ["Airtel","100 Mbps",999,"+GST, Netflix bundle","Unlimited","Netflix + Amazon + Apple TV + 4 more",100],
-  ["Hathway","150 Mbps",899,"Quarterly plan","Unlimited","6 OTT + DTH",150],
-  // 300 Mbps
-  ["Excitel","300 Mbps",724,"12mo + OTT","Unlimited","22 OTT + Live TV",300],
-  ["ACT","300 Mbps",899,"","Unlimited","None",300],
-  ["JioFiber","300 Mbps",1499,"Prepaid +GST","Unlimited","Netflix + Amazon + 14 OTT",300],
-  ["Airtel","300 Mbps",1599,"+GST, TV + Netflix","Unlimited","TV + Netflix + Amazon + Apple TV + 5 more",300],
-  ["Tata Play","300 Mbps",1500,"Check availability","Unlimited","Premium OTT",300],
-  // 500 Mbps
-  ["ACT","500 Mbps",1199,"","Unlimited","Jio Hotstar + Yup TV",500],
-  ["Tata Play","500 Mbps",1900,"Check availability","Unlimited","Premium OTT",500],
-  // 1 Gbps
-  
-  ["ACT","1 Gbps",2499,"","Unlimited","Jio Hotstar + Yup TV",1000],
-  ["Tata Play","1 Gbps",3500,"Check availability","Unlimited","All Premium OTT",1000],
-  ["Airtel","1 Gbps",3999,"+GST, TV + Netflix Premium","Unlimited","TV + Netflix Premium + Amazon + Apple TV + Apollo 24|7 + 5 more",1000],
-];
+// ==================== COMPARISON (DERIVED FROM ISPS) ====================
+// Flatten every plan from every ISP into comparison rows. No hand-maintained
+// second copy of the pricing data, so the table can never drift from the cards.
+const CMP=ISPS.flatMap(isp=>isp.plans.map(p=>({
+  isp:isp.abbr,
+  s:p.s,
+  price:p.p,
+  note:p.cmpNote||"",
+  fup:p.fup,
+  ott:p.ott,
+  n:speedNum(p.s),
+})));
 function renderCmp(filter="all"){
   const b=document.getElementById("cmpBody");b.innerHTML="";
   let data=filter==="all"?[...CMP]:CMP.filter(r=>{
-    const n=r[6];
+    const n=r.n;
     if(filter==="50")return n<=50;
     if(filter==="100")return n>50&&n<=100;
     if(filter==="200")return n>100&&n<=200;
@@ -419,17 +471,17 @@ function renderCmp(filter="all"){
     return true;
   });
   const bySpeed={};
-  data.forEach(r=>{if(r[2]==="N/A")return;const k=r[6];if(!bySpeed[k]||r[2]<bySpeed[k])bySpeed[k]=r[2];});
-  data.sort((a,b)=>{if(a[2]==="N/A")return 1;if(b[2]==="N/A")return -1;return a[2]-b[2];});
+  data.forEach(r=>{const k=r.n;if(!(k in bySpeed)||r.price<bySpeed[k])bySpeed[k]=r.price;});
+  data.sort((a,b)=>a.price-b.price);
   data.forEach(r=>{
-    const cheap=r[2]!=="N/A"&&r[2]===bySpeed[r[6]];
+    const cheap=r.price===bySpeed[r.n];
     b.innerHTML+=`<tr>
-      <td style="font-weight:600">${r[0]}</td>
-      <td>${r[1]}</td>
-      <td class="${cheap?"cheapest":""}">${r[2]==="N/A"?"N/A":"INR "+r[2]}</td>
-      <td style="color:var(--muted);font-size:.75rem">${r[3]}</td>
-      <td>${r[4]}</td>
-      <td style="color:var(--orange);font-size:.78rem">${r[5]}</td>
+      <td style="font-weight:600">${r.isp}</td>
+      <td>${r.s}</td>
+      <td class="${cheap?"cheapest":""}">INR ${r.price.toLocaleString("en-IN")}</td>
+      <td style="color:var(--muted);font-size:.75rem">${r.note}</td>
+      <td>${r.fup}</td>
+      <td style="color:var(--orange);font-size:.78rem">${r.ott}</td>
     </tr>`;
   });
 }
@@ -442,20 +494,34 @@ document.getElementById("cmpTabs").onclick=e=>{
 renderCmp();
 
 // ==================== ROUTER FINDER ====================
+// cap = realistic single-device 5 GHz wireless throughput (Mbps) for this router.
+// Used to bound the speed estimate: you never get more than min(plan, cap).
 const ROUTERS=[
-  {n:"TP-Link Archer C6",w:"Wi-Fi 5 AC1200",spd:[30,50,100],sz:["small"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:2500,price:2000,note:"Budget pick for small flats. Solid for browsing and streaming."},
-  {n:"TP-Link Archer AX12",w:"Wi-Fi 6 AX1500",spd:[30,50,100],sz:["small","medium"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:4000,price:3200,note:"Entry-level Wi-Fi 6. Good future-proofing on a budget."},
-  {n:"TP-Link Archer AX23",w:"Wi-Fi 6 AX1800",spd:[50,100,200],sz:["small","medium"],wall:"medium",use:["basic","streaming","work"],dev:["few","mod"],budget:6000,price:4800,note:"Solid all-rounder. Good range and 5 GHz performance."},
-  {n:"TP-Link Archer AX53",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming"],dev:["mod","many"],budget:8000,price:5999,note:"Best value for money. 160 MHz channel gives excellent 5 GHz speeds."},
-  {n:"TP-Link Archer AX73",w:"Wi-Fi 6 AX5400",spd:[200,300,500,1000],sz:["medium","large","villa"],wall:"high",use:["streaming","gaming","work","power"],dev:["mod","many","lots"],budget:12000,price:8000,note:"Best for gigabit plans. 4x4 MIMO gets close to gigabit wirelessly."},
-  {n:"ASUS RT-AX58U",w:"Wi-Fi 6 AX3000",spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["gaming","work"],dev:["mod","many"],budget:12000,price:8500,note:"Best firmware and management. AiMesh expandable."},
-  {n:"TP-Link Archer AX72 Pro",w:"Wi-Fi 6 AX5400 + 2.5G",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:15000,price:11000,note:"AX73 plus a 2.5G Ethernet port. Future-proof for multi-gig."},
-  {n:"ASUS RT-AX86U Pro",w:"Wi-Fi 6 AX5700",spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:23000,note:"Premium gaming router. WPA3, AiMesh, adaptive QoS."},
-  {n:"TP-Link Archer BE230",w:"Wi-Fi 7 BE3600",spd:[200,300,500,1000],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming","power"],dev:["mod","many","lots"],budget:12000,price:9000,note:"Best future-proof pick. Wi-Fi 7 with dual 2.5G ports at a great price."},
-  {n:"TP-Link Archer BE550",w:"Wi-Fi 7 BE9300",spd:[500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:16000,note:"Top-tier Wi-Fi 7. All 2.5G ports. Maximum future-proofing."},
-  {n:"TP-Link Deco X55 (2-pack)",w:"Wi-Fi 6 Mesh AX5400",spd:[100,200,300,500],sz:["large","villa"],wall:"high",use:["streaming","work"],dev:["mod","many"],budget:15000,price:10000,note:"Mesh system for seamless WiFi across multiple floors. Best for concrete walls."},
-  {n:"TP-Link Deco BE63 (2-pack)",w:"Wi-Fi 7 Mesh BE10000",spd:[500,1000],sz:["villa"],wall:"high",use:["power","gaming"],dev:["many","lots"],budget:30000,price:22000,note:"Premium Wi-Fi 7 mesh. Full gigabit in large multi-story homes."},
+  {n:"TP-Link Archer C6",w:"Wi-Fi 5 AC1200",cap:400,spd:[30,50,100],sz:["small"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:2500,price:2000,note:"Budget pick for small flats. Solid for browsing and streaming."},
+  {n:"TP-Link Archer AX12",w:"Wi-Fi 6 AX1500",cap:500,spd:[30,50,100],sz:["small","medium"],wall:"low",use:["basic","streaming"],dev:["few","mod"],budget:4000,price:3200,note:"Entry-level Wi-Fi 6. Good future-proofing on a budget."},
+  {n:"TP-Link Archer AX23",w:"Wi-Fi 6 AX1800",cap:650,spd:[50,100,200],sz:["small","medium"],wall:"medium",use:["basic","streaming","work"],dev:["few","mod"],budget:6000,price:4800,note:"Solid all-rounder. Good range and 5 GHz performance."},
+  {n:"TP-Link Archer AX53",w:"Wi-Fi 6 AX3000",cap:900,spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming"],dev:["mod","many"],budget:8000,price:5999,note:"Best value for money. 160 MHz channel gives excellent 5 GHz speeds."},
+  {n:"TP-Link Archer AX73",w:"Wi-Fi 6 AX5400",cap:1200,spd:[200,300,500,1000],sz:["medium","large","villa"],wall:"high",use:["streaming","gaming","work","power"],dev:["mod","many","lots"],budget:12000,price:8000,note:"Best for gigabit plans. 4x4 MIMO gets close to gigabit wirelessly."},
+  {n:"ASUS RT-AX58U",w:"Wi-Fi 6 AX3000",cap:900,spd:[100,200,300],sz:["medium","large"],wall:"medium",use:["gaming","work"],dev:["mod","many"],budget:12000,price:8500,note:"Best firmware and management. AiMesh expandable."},
+  {n:"TP-Link Archer AX72 Pro",w:"Wi-Fi 6 AX5400 + 2.5G",cap:1250,spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:15000,price:11000,note:"AX73 plus a 2.5G Ethernet port. Future-proof for multi-gig."},
+  {n:"ASUS RT-AX86U Pro",w:"Wi-Fi 6 AX5700",cap:1300,spd:[300,500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:23000,note:"Premium gaming router. WPA3, AiMesh, adaptive QoS."},
+  {n:"TP-Link Archer BE230",w:"Wi-Fi 7 BE3600",cap:1500,spd:[200,300,500,1000],sz:["medium","large"],wall:"medium",use:["streaming","work","gaming","power"],dev:["mod","many","lots"],budget:12000,price:9000,note:"Best future-proof pick. Wi-Fi 7 with dual 2.5G ports at a great price."},
+  {n:"TP-Link Archer BE550",w:"Wi-Fi 7 BE9300",cap:2500,spd:[500,1000],sz:["large","villa"],wall:"high",use:["gaming","power"],dev:["many","lots"],budget:30000,price:16000,note:"Top-tier Wi-Fi 7. All 2.5G ports. Maximum future-proofing."},
+  {n:"TP-Link Deco X55 (2-pack)",w:"Wi-Fi 6 Mesh AX5400",cap:1000,spd:[100,200,300,500],sz:["large","villa"],wall:"high",use:["streaming","work"],dev:["mod","many"],budget:15000,price:10000,note:"Mesh system for seamless WiFi across multiple floors. Best for concrete walls."},
+  {n:"TP-Link Deco BE63 (2-pack)",w:"Wi-Fi 7 Mesh BE10000",cap:2500,spd:[500,1000],sz:["villa"],wall:"high",use:["power","gaming"],dev:["many","lots"],budget:30000,price:22000,note:"Premium Wi-Fi 7 mesh. Full gigabit in large multi-story homes."},
 ];
+// Estimate real-world wireless speed as a range, bottlenecked by whichever is
+// lower: the plan or the router's wireless ceiling. This makes the estimate
+// actually depend on the chosen router instead of the plan alone.
+function wifiEstimate(planMbps, router){
+  const eff=Math.min(planMbps, router.cap);
+  const round10=v=>Math.round(v/10)*10;
+  return {
+    low:round10(eff*0.7),
+    high:round10(eff*0.95),
+    bottleneck: router.cap < planMbps,
+  };
+}
 function findRouter(){
   const spd=+document.getElementById("fSpeed").value;
   const sz=document.getElementById("fSize").value;
@@ -474,8 +540,7 @@ function findRouter(){
     return{...r,score:s};
   });
   scored.sort((a,b)=>b.score-a.score);
-  const top=scored.slice(0,3);
-  const estSpeed=spd>=500?"700 to 950 Mbps":spd>=200?"500 to 750 Mbps":spd>=100?"350 to 550 Mbps":"150 to 300 Mbps";
+  const top=scored.slice(0,3).map(r=>({...r,est:wifiEstimate(spd,r)}));
   document.getElementById("routerOut").innerHTML=`
     <h3 style="margin-top:1.25rem;margin-bottom:.5rem">Top picks for your setup</h3>
     ${top.map((r,i)=>`
@@ -486,8 +551,8 @@ function findRouter(){
             <div class="rec-meta">${r.w} &middot; INR ${r.price.toLocaleString("en-IN")}${wall==="concrete"&&r.wall==="high"?" &middot; Good through concrete":""}</div>
           </div>
           <div style="text-align:right">
-            <div class="rec-speed">~${estSpeed}</div>
-            <div style="font-size:.72rem;color:var(--muted)">wireless estimate</div>
+            <div class="rec-speed">~${r.est.low} to ${r.est.high} Mbps</div>
+            <div style="font-size:.72rem;color:var(--muted)">${r.est.bottleneck?"router caps your plan":"wireless estimate"}</div>
           </div>
         </div>
         <p class="rec-why">${r.note}</p>
@@ -550,6 +615,110 @@ document.querySelectorAll("nav a").forEach(a=>{
     if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
   });
 });
+
+// ==================== HERO BACKGROUND ====================
+// Adapted from ThreeUI's "Connectivity Graph" community component
+// (github.com/MengTo/threeui, MIT). Reimplemented dependency-free in vanilla
+// canvas 2D and tuned to the site palette: connectivity beams stream upward
+// from the base of the hero, evoking a network fanning out.
+(function heroNetwork(){
+  const canvas=document.getElementById("heroCanvas");
+  const toggle=document.getElementById("heroToggle");
+  if(!canvas||!canvas.getContext)return;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  const prefersReduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w=0,h=0,particles=[],raf=null,playing=!prefersReduced;
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+
+  function spawn(initial){
+    return {
+      angle:Math.PI*1.25+Math.random()*Math.PI*0.5, // fan upward from the base
+      speed:rnd(0.4,1.8),
+      distance:initial?Math.random()*(h*1.2):Math.random()*40,
+      maxLength:rnd(16,120),
+      length:0,
+      alpha:0,
+    };
+  }
+  function initParticles(){
+    const count=w<640?36:70;
+    particles=[];
+    for(let i=0;i<count;i++)particles.push(spawn(true));
+  }
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const r=canvas.getBoundingClientRect();
+    w=Math.max(1,r.width);h=Math.max(1,r.height);
+    canvas.width=Math.floor(w*dpr);
+    canvas.height=Math.floor(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    initParticles();
+    if(!playing)draw(); // keep a static frame visible when paused/reduced-motion
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    const ox=w/2,oy=h+30;
+    for(const p of particles){
+      p.distance+=p.speed;
+      p.length=Math.min(p.maxLength,p.distance*0.8);
+      const nd=p.distance/(h*1.2);
+      p.alpha=Math.min(1,p.distance/90)*Math.max(0,1-nd);
+      if(p.distance>h*1.4)Object.assign(p,spawn(false));
+      const sx=ox+Math.cos(p.angle)*p.distance;
+      const sy=oy+Math.sin(p.angle)*p.distance;
+      const ex=ox+Math.cos(p.angle)*(p.distance+p.length);
+      const ey=oy+Math.sin(p.angle)*(p.distance+p.length);
+      const dr=Math.min(1,p.distance/h);
+      const light=42+dr*18;         // stays within the site's blue (hsl ~221,83%,53%)
+      const a=p.alpha*0.5;          // subtle so hero text stays readable
+      const g=ctx.createLinearGradient(sx,sy,ex,ey);
+      g.addColorStop(0,`hsla(221,83%,${light}%,0)`);
+      g.addColorStop(1,`hsla(221,83%,${light}%,${a})`);
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,ey);
+      ctx.strokeStyle=g;ctx.lineWidth=0.5+dr*1.3;ctx.stroke();
+      ctx.beginPath();ctx.arc(ex,ey,0.5+dr*1.3,0,Math.PI*2);
+      ctx.fillStyle=`hsla(221,90%,${light+10}%,${a*1.3})`;ctx.fill();
+    }
+  }
+  function loop(){
+    if(!playing)return;
+    draw();
+    raf=requestAnimationFrame(loop);
+  }
+  function setPlaying(on){
+    playing=on;
+    toggle.textContent=on?"Pause":"Play";
+    toggle.setAttribute("aria-label",(on?"Pause":"Play")+" background animation");
+    if(on){loop();}
+    else if(raf){cancelAnimationFrame(raf);raf=null;}
+  }
+
+  resize();
+  window.addEventListener("resize",()=>{if(raf){cancelAnimationFrame(raf);raf=null;}resize();if(playing)loop();});
+  toggle.addEventListener("click",()=>setPlaying(!playing));
+  setPlaying(playing);
+})();
+
+// ==================== COLOR THEME TOGGLE ====================
+(function themeToggle(){
+  const KEY="hydnet-theme";
+  const root=document.documentElement;
+  const btn=document.getElementById("themeToggle");
+  if(!btn)return;
+  function sync(){
+    const dark=root.getAttribute("data-theme")==="dark";
+    btn.textContent=dark?"☀":"☾";
+    btn.setAttribute("aria-label",(dark?"Switch to light theme":"Switch to dark theme"));
+    btn.setAttribute("title",(dark?"Switch to light theme":"Switch to dark theme"));
+  }
+  sync();
+  btn.addEventListener("click",()=>{
+    const next=root.getAttribute("data-theme")==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem(KEY,next);}catch(e){}
+    sync();
+  });
+})();
 </script>
 </body>
 </html>

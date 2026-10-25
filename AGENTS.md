@@ -20,6 +20,10 @@ Opening `index.html` via `file://` also works, but serving over HTTP is closer t
 
 ### Interactive features to smoke-test
 
+- Speed calculator: +/- steppers update `#calcOut`; its buttons set the comparison speed filter and the router finder speed.
+- Plan Comparison: speed/provider chips, the three option switches (incl. GST), and sortable column headers re-render `#cmpBody`. Below 720px the table renders as cards.
+- ISP Encyclopedia: filter chips, and click an ISP row to expand/collapse its plan cards.
 - Router Recommender ("Find the Right Router"): set the dropdowns and click "Find My Router" — recommendations render into `#routerOut`.
-- ISP Encyclopedia: click an ISP row to expand/collapse its plan cards.
-- Plan Comparison, Security Audit, and Glossary sections.
+- Security Audit: ticking items updates the grade and persists in `localStorage` (`hydnet-audit`).
+- Glossary: search box filters `#glossGrid`.
+- All plan data lives in the `ISPS` array in `index.html`; every view is derived from it. When updating prices, update the `VERIFIED` constant too.

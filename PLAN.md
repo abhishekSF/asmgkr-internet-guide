@@ -1,6 +1,6 @@
 # HyderabadNet - Project Plan
 
-## What We Built (Current State — Aug 2026)
+## What We Built (Current State — Oct 2026)
 
 A single-page HTML application. Multiple design explorations were done (original clean version + three redesigns with stronger personality). Analysis concluded the right product is a **restrained, high-utility version** that keeps the best engagement features without visual or interaction overkill.
 
@@ -8,13 +8,14 @@ A single-page HTML application. Multiple design explorations were done (original
 
 | Section | Status | Notes |
 |---------|--------|-------|
-| Plan Comparison | Done | Speed-tier filterable table, cheapest highlighted |
-| ISP Encyclopedia | Done | 7 ISPs, verified plans, expandable cards, direct links |
-| Neighborhood flavor | Light | Simple tips / scores for major areas (real data still thin) |
-| Router Recommender | Done | Multi-step wizard, ~12 routers, accounts for walls + devices + budget |
-| Roast my internet | **New / Keep** | High-engagement diagnostic — the best addition from redesigns |
-| Security Audit | Done + upgraded | Interactive score/grade + checklist |
-| Glossary | Done | Plain-English definitions |
+| Speed Calculator | Done (Oct 2026) | Peak-hour usage → recommended tier, links into Compare + Router Finder |
+| Plan Comparison | Done | Min-speed / provider / bundle / data-cap filters, sortable, GST toggle, upload + ₹/Mbps + billing columns, fees table, mobile card layout |
+| ISP Encyclopedia | Done | 6 ISPs, 40 plans, fees, upload, pros/cons, tenure pricing, source per ISP |
+| Neighborhood flavor | Not started | Real locality data still needed |
+| Router Recommender | Done | 12 routers, WAN-port ceiling, budget-aware ranking with reasons, Amazon/Flipkart price links |
+| Roast my internet | Not started | High-engagement diagnostic idea from redesigns |
+| Security Audit | Done | Interactive weighted checklist, A–F grade, saved in localStorage |
+| Glossary | Done | 35 terms, searchable |
 
 ### Design Direction (locked)
 
@@ -24,42 +25,56 @@ A single-page HTML application. Multiple design explorations were done (original
 - **Remove / avoid:** heavy animated SVG network map, full-screen quiz overlay, hard neo-brutalist shadows everywhere, fake “X reports” numbers, competing design systems, 3+ Google font families.
 - Goal: feels like a sharp local tool, not a design showcase.
 
-### ISP Data (Verified Against Websites)
+### ISP Data (Re-verified October 2026)
 
-| ISP | Plans Listed | Price Range | Source |
-|-----|-------------|-------------|--------|
-| ACT Fibernet | 5 (100 Mbps to 1 Gbps) | INR 549 to 2299/mo | actcorp.in |
-| Airtel Xstream | 7 (40 Mbps to 1 Gbps) | INR 449 to 3699/mo | airtel.in |
-| JioFiber | 4 (30 Mbps to 300 Mbps) | INR 366 to 1399/mo | jio.com |
-| Excitel | 4 (200 to 300 Mbps) | INR 466 to 724/mo (12mo) | excitel.com |
-| BSNL Bharat Fiber | 3 (40 to 150 Mbps) | INR 366 to 733/mo | plansinfo.com |
-| Tata Play Fiber | 4 (50 Mbps to 1 Gbps) | INR 699 to 3266/mo | tataplayfiber.com |
-| Hathway | 3 (40 to 150 Mbps) | INR 499 to 849/mo | hathway.com |
+All prices are listed monthly price excluding GST. Data lives in the `ISPS` array in `index.html`; every view is derived from it.
+
+| ISP | Plans Listed | Price Range | Upload | Source |
+|-----|-------------|-------------|--------|--------|
+| ACT Fibernet | 11 (50 Mbps to 1 Gbps, incl. OTT packs) | ₹575 to ₹3,199 | Symmetric | actcorp.in Hyderabad plan grid |
+| Airtel Xstream | 8 (40 Mbps to 1 Gbps) | ₹499 to ₹3,999 | Not published | airtel.in/plans/broadband/hyderabad |
+| JioFiber | 4 prepaid (30 to 300 Mbps) | ₹399 to ₹1,499 | Symmetric | jio.com Hyderabad page |
+| Excitel | 4 (200/300 Mbps, 3/6/9/12-mo prices) | ₹466 to ₹724 (12-mo) | Not published | excitel.com Hyderabad + T&C |
+| BSNL Bharat Fibre | 7 (50 to 300 Mbps, all with FUP) | ₹449 to ₹1,799 | Not published | BSNL Telangana circle FTTH tariff, Aug 2026 |
+| Hathway | 6 (40 to 300 Mbps) | ₹524 to ₹824 (12-mo effective) | ~30% of download | hathway.com Hyderabad + speed disclosure |
+
+**Corrections made in the Oct 2026 refresh:**
+- ACT: old prices (₹599/100 Mbps etc.) came from stale SEO text on actcorp.in; the live plan grid is ₹575/50 Mbps to ₹2,999/1 Gbps, with 400 and 600 Mbps tiers and no 300 Mbps.
+- Airtel: added the new ₹1,199 100 Mbps + TV + Netflix plan. Removed invented "quarterly" prices.
+- BSNL: ₹399/40 Mbps is rural-only. Replaced with the Telangana urban line-up (Spark ₹449 to Ultra OTT ₹1,799) with FUP and post-FUP speeds.
+- Hathway: Hyderabad line-up is now 40–300 Mbps at ₹524–₹824 effective; Hathway publishes typical upload at ~30% of plan speed.
+- Tata Play Fiber: removed. Hyderabad isn't in its 18 serviceable cities and its Hyderabad plans URL returns 404.
+- Removed unsourced star ratings in favour of sourced "Good for / Watch out" notes.
+- Routers: Deco X55 corrected to AX3000; speed estimates now account for 1G WAN ports capping real throughput at ~940 Mbps.
+
+BSNL's own sites were unreachable when re-verifying; recheck against bsnl.co.in when possible.
 
 ### What's Covered
 
-- Plan speeds, monthly/quarterly pricing, FUP, OTT bundles
-- Direct links to ISP Hyderabad plans pages
-- Router recommendations matched to speed, home size, usage, devices, budget, wall type
+- Plan speeds, upload speeds, monthly / tenure pricing, billing basis, FUP + post-FUP speed, OTT bundles
+- Installation fees, deposits and router terms per ISP; GST toggle
+- Direct links to ISP Hyderabad plans pages, with source + verification date per ISP
+- Speed calculator (peak-hour usage → recommended tier)
+- Router recommendations matched to speed, home size, usage, devices, budget, wall type, with reasons
 - Concrete wall / multi-floor advice
-- Interactive “Roast my internet” diagnostic
 - Security score + hardening checklist
-- Networking glossary
+- Searchable networking glossary
 - Strong local voice, “made with love by asmgkr”
 
 ### What's Missing (prioritized)
 
 **High priority (do next):**
 1. Real locality / area-wise ISP availability & reliability notes (Gachibowli, Madhapur, Kukatpally, etc.)
-2. Upload speed comparison (critical for WFH)
-3. Installation charges, deposits, hidden fees
-4. Affiliate links (Amazon + Flipkart + ISP referrals) so the project can earn
-5. SEO meta + Open Graph + basic analytics (Phase 1)
+2. ~~Upload speed comparison~~ Done (Oct 2026), shows "Not published" where the ISP doesn't disclose it
+3. ~~Installation charges, deposits, hidden fees~~ Done (Oct 2026), fees table + per-ISP facts
+4. Affiliate links: Amazon/Flipkart search links are on router cards; swap in affiliate tags once approved
+5. ~~SEO meta + Open Graph~~ Done; basic analytics still to add (Phase 1)
 
 **Medium:**
-- Needs calculator (usage → recommended speed tier)
+- ~~Needs calculator (usage → recommended speed tier)~~ Done (Oct 2026)
 - ISP-specific setup guides (change password, enable WPA3, etc.)
-- Share / save comparison results
+- Share / save comparison results (filters in URL)
+- Upload speeds for Airtel / Excitel / BSNL once published or measured
 
 **Later:**
 - User-submitted speed data by area
@@ -144,10 +159,10 @@ A single-page HTML application. Multiple design explorations were done (original
 
 - [x] Analyze original vs redesigns — identify what sits right vs overkill
 - [x] Lock design direction (restrained warm paper + lime + personality + Roast)
-- [ ] Produce single clean production `index.html`
-- [ ] Strip overkill (heavy SVG map, quiz overlay, fake report counts)
-- [ ] Confirm SEO meta + Open Graph are solid
-- [ ] Update this PLAN.md
+- [x] Produce single clean production `index.html`
+- [x] Strip overkill (heavy SVG map, quiz overlay, fake report counts, unsourced ratings)
+- [x] Confirm SEO meta + Open Graph are solid
+- [x] Update this PLAN.md
 
 ### Phase 1: Deploy and Share (next)
 
@@ -169,12 +184,12 @@ A single-page HTML application. Multiple design explorations were done (original
 - [ ] Amazon Associates India + Flipkart Affiliate → “Buy on Amazon” on router cards
 - [ ] ISP referral links where available
 - [ ] Real locality notes for 10–15 major areas (availability + common complaints)
-- [ ] Add upload speeds to comparison table
-- [ ] Installation charges / deposit notes per ISP
+- [x] Add upload speeds to comparison table
+- [x] Installation charges / deposit notes per ISP
 
 ### Phase 3: Interactive Depth
 
-- [ ] Needs calculator (people + streams + devices → recommended speed)
+- [x] Needs calculator (people + streams + devices → recommended speed)
 - [ ] Better share results (roast score, security grade, comparison)
 - [ ] Inline jargon tooltips
 - [ ] ISP-specific setup guides (ACT / Airtel / Jio password + WPA3)
